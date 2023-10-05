@@ -5,14 +5,21 @@
 /// </summary>
 public class Result
 {
-    internal Result(string output)
-    {
-        this.Output = output;
-    }
+    /// <summary>
+    /// Contains the input repeated the specified number of times.
+    /// </summary>
+    /// <example>Example of the output.</example>
+    public bool Success { get; private set; }
 
     /// <summary>
     /// Contains the input repeated the specified number of times.
     /// </summary>
     /// <example>Example of the output.</example>
-    public string Output { get; private set; }
+    public object Message { get; private set; }
+
+    internal Result(bool success, object message)
+    {
+        this.Success = success;
+        this.Message = message;
+    }
 }

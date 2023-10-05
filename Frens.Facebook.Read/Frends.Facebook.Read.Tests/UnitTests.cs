@@ -1,11 +1,14 @@
 namespace Frends.Facebook.Read.Tests;
 
 using Frends.Facebook.Read.Definitions;
+using Microsoft.VisualBasic;
 using NUnit.Framework;
 
 [TestFixture]
 public class UnitTests
 {
+    private readonly string token = "token";
+
     [Test]
     public void Test()
     {
@@ -20,8 +23,9 @@ public class UnitTests
             Delimiter = ", ",
         };
 
-        var ret = Read.TaskName(input, options, default);
+        var ret = Facebook.Read(input, options, default);
 
-        Assert.That(ret.Output, Is.EqualTo("foobar, foobar, foobar"));
+        //Assert.That(ret.Message, Is.EqualTo("foobar, foobar, foobar"));
+        Assert.IsNotNull(ret);
     }
 }

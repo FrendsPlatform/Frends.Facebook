@@ -1,7 +1,9 @@
 ﻿namespace Frends.Facebook.Read;
 
 using System.ComponentModel;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 using Frends.Facebook.Read.Definitions;
 
 /// <summary>
@@ -9,6 +11,8 @@ using Frends.Facebook.Read.Definitions;
 /// </summary>
 public static class Facebook
 {
+    private static readonly HttpClient client = new HttpClient();
+
     /// <summary>
     /// This is Task.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/namespaceForTask).
@@ -17,19 +21,13 @@ public static class Facebook
     /// <param name="options">Define if repeated multiple times. </param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { string Output }.</returns>
-    public static Result Read([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
+    public static async Task<Result> Read([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        var repeats = new string[options.Amount];
+        /*Get Facebook user info with token
+         graph.facebook.com/v18.0/{object-id}/insights/{metric}*/
 
-        for (var i = 0; i < options.Amount; i++)
-        {
-            // It is good to check the cancellation token somewhere you spend lot of time, e.g. in loops.
-            cancellationToken.ThrowIfCancellationRequested();
-            repeats[i] = input.Content;
-        }
+        var responseString = await client.GetStringAsync("graph.facebook.com/v18.0/me?fields=id,name");
 
-        var output = new Result(string.Join(options.Delimiter, repeats));
-
-        return output;
+        return new Result(true, responseString);
     }
 }

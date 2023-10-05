@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Frends.Facebook.Read</name>
+    </assembly>
+    <members>
+        <member name="T:Frends.Facebook.Read.Definitions.Input">
+            <summary>
+            Input class usually contains parameters that are required.
+            </summary>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Input.Content">
+            <summary>
+            Something that will be repeated.
+            </summary>
+            <example>Some example of the expected value.</example>
+        </member>
+        <member name="T:Frends.Facebook.Read.Definitions.Options">
+            <summary>
+            Options class usually contains parameters that are required.
+            </summary>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Options.Amount">
+            <summary>
+            Number of times input is repeated.
+            </summary>
+            <example>Example of the parameter value.</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Options.Delimiter">
+            <summary>
+            How repeats of the input are separated.
+            </summary>
+            <example>Example of the parameter value.</example>
+        </member>
+        <member name="T:Frends.Facebook.Read.Definitions.Result">
+            <summary>
+            Result class usually contains properties of the return object.
+            </summary>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Result.Success">
+            <summary>
+            Contains the input repeated the specified number of times.
+            </summary>
+            <example>Example of the output.</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Result.Message">
+            <summary>
+            Contains the input repeated the specified number of times.
+            </summary>
+            <example>Example of the output.</example>
+        </member>
+        <member name="T:Frends.Facebook.Read.Facebook">
+            <summary>
+            Main class of the Task.
+            </summary>
+        </member>
+        <member name="M:Frends.Facebook.Read.Facebook.Read(Frends.Facebook.Read.Definitions.Input,Frends.Facebook.Read.Definitions.Options,System.Threading.CancellationToken)">
+            <summary>
+            This is Task.
+            [Documentation](https://tasks.frends.com/tasks/frends-tasks/namespaceForTask).
+            </summary>
+            <param name="input">What to repeat.</param>
+            <param name="options">Define if repeated multiple times. </param>
+            <param name="cancellationToken">Cancellation token given by Frends.</param>
+            <returns>Object { string Output }.</returns>
+        </member>
+    </members>
+</doc>
