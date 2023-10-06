@@ -1,17 +1,21 @@
 ﻿namespace Frends.Facebook.Read;
 
+using System;
 using System.ComponentModel;
 using System.Net.Http;
+using System.Reflection.Metadata;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Frends.Facebook.Read.Definitions;
+using RestSharp;
 
 /// <summary>
 /// Main class of the Task.
 /// </summary>
 public static class Facebook
 {
-    private static readonly HttpClient client = new HttpClient();
+    private static readonly HttpClient Client = new HttpClient();
 
     /// <summary>
     /// This is Task.
@@ -26,8 +30,26 @@ public static class Facebook
         /*Get Facebook user info with token
          graph.facebook.com/v18.0/{object-id}/insights/{metric}*/
 
-        var responseString = await client.GetStringAsync("graph.facebook.com/v18.0/me?fields=id,name");
+        try
+        {
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://graph.facebook.com/v18.0/me?fields=id,name"),
+            };
+            request.Headers.Add("Authorization", "Bearer token");
 
-        return new Result(true, responseString);
+            var responseMessage = Client.Send(request, cancellationToken);
+            responseMessage.EnsureSuccessStatusCode();
+            var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            Console.WriteLine("Response: " + responseString);
+
+            return new Result(true, responseMessage);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return new Result(false, ex.Message);
+        }
     }
 }

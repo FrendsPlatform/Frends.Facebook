@@ -1,12 +1,28 @@
 {
   "version": 2,
-  "dgSpecHash": "2gC4A0SeQlQuFmrdtjHQwAk1AeciQwmIIX1+IQ0Ph/PlcGYZVAhMg7ksNqlMAnWVpY2MDHZy31bodQ8smWHmnw==",
+  "dgSpecHash": "JxZ5j0dRKQU/FUr20eHnU1cFqmGTp/Y3GAm7+2yW0j3NvmsEro8bwxgGS0bWTtbcIfJo/9xarIL43HJLbPpzNQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\ahlstve\\source\\repos\\Frends.Facebook\\Frens.Facebook.Read\\Frends.Facebook.Read\\Frends.Facebook.Read.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ahlstve\\.nuget\\packages\\facebook\\7.0.6\\facebook.7.0.6.nupkg.sha512",
     "C:\\Users\\ahlstve\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\ahlstve\\.nuget\\packages\\restsharp\\110.2.0\\restsharp.110.2.0.nupkg.sha512",
     "C:\\Users\\ahlstve\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512",
-    "C:\\Users\\ahlstve\\.nuget\\packages\\system.componentmodel.annotations\\4.7.0\\system.componentmodel.annotations.4.7.0.nupkg.sha512"
+    "C:\\Users\\ahlstve\\.nuget\\packages\\system.componentmodel.annotations\\4.7.0\\system.componentmodel.annotations.4.7.0.nupkg.sha512",
+    "C:\\Users\\ahlstve\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\ahlstve\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
+    "C:\\Users\\ahlstve\\.nuget\\packages\\system.text.json\\7.0.2\\system.text.json.7.0.2.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Facebook 7.0.6' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Facebook",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }
