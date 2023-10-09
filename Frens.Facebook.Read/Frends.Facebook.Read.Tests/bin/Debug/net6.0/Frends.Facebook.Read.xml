@@ -9,11 +9,35 @@
             Input class usually contains parameters that are required.
             </summary>
         </member>
-        <member name="P:Frends.Facebook.Read.Definitions.Input.Content">
+        <member name="P:Frends.Facebook.Read.Definitions.Input.Reference">
             <summary>
-            Something that will be repeated.
+            Set reference type.
             </summary>
-            <example>Some example of the expected value.</example>
+            <example>Insights</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Input.Other">
+            <summary>
+            Reference is other.
+            </summary>
+            <example>Insight</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Input.ObjectId">
+            <summary>
+            Object id of Insight, Page or AD.
+            </summary>
+            <example>123456789</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Input.Parameters">
+            <summary>
+            List of parameters
+            </summary>
+            <example>123456789</example>
+        </member>
+        <member name="P:Frends.Facebook.Read.Definitions.Input.Token">
+            <summary>
+            Authentication bearer token.
+            </summary>
+            <example>BearerToken1234</example>
         </member>
         <member name="T:Frends.Facebook.Read.Definitions.Options">
             <summary>
@@ -31,6 +55,26 @@
             How repeats of the input are separated.
             </summary>
             <example>Example of the parameter value.</example>
+        </member>
+        <member name="F:Frends.Facebook.Read.Definitions.References.Pages">
+            <summary>
+            Get Pages
+            </summary>
+        </member>
+        <member name="F:Frends.Facebook.Read.Definitions.References.Insights">
+            <summary>
+            Get Pages / insights
+            </summary>
+        </member>
+        <member name="F:Frends.Facebook.Read.Definitions.References.ADS">
+            <summary>
+            Get ADS from ad archive
+            </summary>
+        </member>
+        <member name="F:Frends.Facebook.Read.Definitions.References.Other">
+            <summary>
+            Get with other reference
+            </summary>
         </member>
         <member name="T:Frends.Facebook.Read.Definitions.Result">
             <summary>

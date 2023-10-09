@@ -32,12 +32,31 @@ public static class Facebook
 
         try
         {
+            var url = "https://graph.facebook.com/v18.0/";
+
+            // Set url base
+            switch (input.Reference)
+            {
+                case References.Insights:
+                    url += input.ObjectId + "/insights/";
+                    break;
+                case References.Pages:
+                    url += input.ObjectId;
+                    break;
+                case References.ADS:
+                    url += "ads_archive";
+                    break;
+                case References.Other:
+                    url += input.ObjectId;
+                    break;
+            }
+
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://graph.facebook.com/v18.0/me?fields=id,name"),
+                RequestUri = new Uri(url),
             };
-            request.Headers.Add("Authorization", "Bearer token");
+            request.Headers.Add("Authorization", "Bearer " + input.Token);
 
             var responseMessage = Client.Send(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
@@ -48,7 +67,6 @@ public static class Facebook
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
             return new Result(false, ex.Message);
         }
     }
