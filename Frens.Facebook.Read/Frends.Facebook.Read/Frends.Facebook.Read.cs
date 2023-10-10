@@ -3,19 +3,16 @@
 using System;
 using System.ComponentModel;
 using System.Net.Http;
-using System.Reflection.Metadata;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Frends.Facebook.Read.Definitions;
-using RestSharp;
 
 /// <summary>
 /// Main class of the Task.
 /// </summary>
 public static class Facebook
 {
-    private static readonly HttpClient Client = new HttpClient();
+    internal static readonly HttpClient _client = new HttpClient();
 
     /// <summary>
     /// This is Task.
@@ -29,27 +26,14 @@ public static class Facebook
     {
         /*Get Facebook user info with token
          graph.facebook.com/v18.0/{object-id}/insights/{metric}*/
+        if (string.IsNullOrEmpty(input.Token))
+        {
+            throw new ArgumentNullException(nameof(input.Token) + " can not be empty.");
+        }
 
         try
         {
-            var url = "https://graph.facebook.com/v18.0/";
-
-            // Set url base
-            switch (input.Reference)
-            {
-                case References.Insights:
-                    url += input.ObjectId + "/insights/";
-                    break;
-                case References.Pages:
-                    url += input.ObjectId;
-                    break;
-                case References.ADS:
-                    url += "ads_archive";
-                    break;
-                case References.Other:
-                    url += input.ObjectId;
-                    break;
-            }
+            var url = GetUrl(input);
 
             var request = new HttpRequestMessage
             {
@@ -58,16 +42,55 @@ public static class Facebook
             };
             request.Headers.Add("Authorization", "Bearer " + input.Token);
 
-            var responseMessage = Client.Send(request, cancellationToken);
+            var responseMessage = _client.Send(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            Console.WriteLine("Response: " + responseString);
+            Console.WriteLine("Response:" + responseString);
 
-            return new Result(true, responseMessage);
+            return new Result(true, responseString);
         }
         catch (Exception ex)
         {
             return new Result(false, ex.Message);
         }
+    }
+
+    private static string GetUrl(Input input)
+    {
+        var url = "https://graph.facebook.com/v18.0/";
+
+        // Set url base
+        switch (input.Reference)
+        {
+            case References.Insights:
+                url += input.ObjectId + "/insights";
+                break;
+            case References.Pages:
+                url += input.ObjectId;
+                break;
+            case References.ADS:
+                url += "ads_archive";
+                break;
+            case References.Other:
+                url += input.Other;
+                break;
+        }
+
+        if (input.Parameters != null)
+        {
+            url += "?";
+
+            for (int i = 0; i < input.Parameters.Count; i++)
+            {
+                if (i != 0 && i != input.Parameters.Count)
+                {
+                    url += "&";
+                }
+
+                url += $"{input.Parameters[i].Key}={input.Parameters[i].Value}";
+            }
+        }
+
+        return url;
     }
 }

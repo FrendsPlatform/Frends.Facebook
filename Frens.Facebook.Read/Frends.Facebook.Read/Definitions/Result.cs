@@ -15,7 +15,7 @@ public class Result
     /// Contains the input repeated the specified number of times.
     /// </summary>
     /// <example>Example of the output.</example>
-    public object Message { get; private set; }
+    public dynamic Message { get; private set; }
 
     public Result(bool success, object message)
     {
