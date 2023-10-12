@@ -1,4 +1,4 @@
-name: TaskName_release
+name: Get_release
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ jobs:
   build:
     uses: FrendsPlatform/FrendsTasks/.github/workflows/release.yml@main
     with:
-      workdir: namespaceForTask
+      workdir: Frends.Facebook.Get
     secrets:
       feed_api_key: ${{ secrets.TASKS_FEED_API_KEY }}
       
