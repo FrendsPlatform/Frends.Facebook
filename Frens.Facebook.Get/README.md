@@ -1,9 +1,9 @@
-# namespaceForTask
-Description what the Task will do.
+# Frends.Facebook.Get
+The task gets data from Facebook API with given reference, parameters and token.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Build](https://github.com/FrendsPlatform/Frends.classNameForTask/actions/workflows/TaskName_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.classNameForTask/actions)
-![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.classNameForTask/namespaceForTask|main)
+[![Build](https://github.com/FrendsPlatform/Frends.Facebook/actions/workflows/Get_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Facebook/actions)
+![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.Facebook/Frends.Facebook.Get|main)
 
 ## Installing
 
@@ -13,7 +13,7 @@ You can install the Task via frends UI Task View.
 
 ### Clone a copy of the repository
 
-`git clone https://github.com/FrendsPlatform/Frends.classNameForTask.git`
+`git clone https://github.com/FrendsPlatform/Frends.Facebook.Get.git`
 
 ### Build the project
 
