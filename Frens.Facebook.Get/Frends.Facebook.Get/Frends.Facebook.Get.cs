@@ -30,7 +30,7 @@ public static class Facebook
 
         try
         {
-            var url = GetUrl(input);
+            var url = GetUrl(input, cancellationToken);
 
             var request = new HttpRequestMessage
             {
