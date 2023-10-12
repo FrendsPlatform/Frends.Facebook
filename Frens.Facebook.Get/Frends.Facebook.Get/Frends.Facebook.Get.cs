@@ -51,7 +51,7 @@ public static class Facebook
         }
     }
 
-    private static string GetUrl(Input input)
+    private static string GetUrl(Input input, CancellationToken cancellationToken)
     {
         var url = "https://graph.facebook.com/v18.0/";
 
@@ -78,6 +78,8 @@ public static class Facebook
 
             for (int i = 0; i < input.Parameters.Count; i++)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (i != 0 && i != input.Parameters.Count)
                     url += "&";
 
