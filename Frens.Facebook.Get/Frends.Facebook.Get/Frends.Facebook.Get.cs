@@ -16,13 +16,12 @@ public static class Facebook
 
     /// <summary>
     /// This is task for reading data from Facebook API.
-    /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/namespaceForTask).
+    /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
     /// </summary>
-    /// <param name="input">What to repeat.</param>
-    /// <param name="options">Define if repeated multiple times. </param>
+    /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Read([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
+    public static async Task<Result> Read([PropertyTab] Input input, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(input.Token))
         {
@@ -43,7 +42,6 @@ public static class Facebook
             var responseMessage = _client.Send(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            Console.WriteLine("Response:" + responseString);
 
             return new Result(true, responseString);
         }
@@ -86,7 +84,6 @@ public static class Facebook
                 url += $"{input.Parameters[i].Key}={input.Parameters[i].Value}";
             }
         }
-        Console.WriteLine(url);
 
         return url;
     }

@@ -12,32 +12,46 @@ using System.Threading.Tasks;
 [TestFixture]
 public class UnitTests
 {
-    private readonly string _objectId = "objectId";
-    private readonly string _clientId = "clientId";
-    private readonly string _clientSecret = "clientSecret";
+    private string _objectId;
+    //private readonly string _clientId = "clientId";
+    //private readonly string _clientSecret = "clientSecret";
+    //privare readonly string _facebookId = "facebookId";
 
-    private string _token = "";
+    private string _token = Environment.GetEnvironmentVariable("Facebook_token");
 
     internal static readonly HttpClient _client = new HttpClient();
 
+    //Todo: Create Page Access Token
     [SetUp]
     public async Task SetUp()
     {
         // Fetch token
-
-        try
+        /*try
         {
+
             var appTokenUrl = @"https://graph.facebook.com/v18.0/oauth/access_token?" +
                 "client_id=" + _clientId +
                 "&client_secret=" + _clientSecret +
                 "&grant_type=client_credentials";
-            var appToken = await GetTokenAsync(appTokenUrl);
+            var appToken = await GetAsync(appTokenUrl);
 
-            var pageAccessUrl = @"https://graph.facebook.com/" + _clientId +
+            var pageAccessUrl = @"https://graph.facebook.com/" + _facebookId +
                 "/accounts?access_token=" + (string)appToken["access_token"];
-            var pageToken = await GetTokenAsync(pageAccessUrl);
+            var pageToken = await GetAsync(pageAccessUrl);
 
-            _token = (string)pageToken["data"];
+            _token = (string)pageToken["data"][0]["access_token"].ToString();
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+        }*/
+
+        // Fetch App Id
+        try 
+        {
+            var appUrl = @"https://graph.facebook.com/v18.0/me";
+            var result = await GetAsync(appUrl, _token);
+            _objectId = (string)result["id"];
         }
         catch(Exception e)
         {
@@ -45,18 +59,18 @@ public class UnitTests
         }
     }
 
-    private static async Task<JObject> GetTokenAsync(string url)
+    private static async Task<JObject> GetAsync(string url, string token)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri(url),
         };
+        if(!string.IsNullOrEmpty(token)) request.Headers.Add("Authorization","Bearer " + token);
 
         var responseMessage = _client.Send(request, CancellationToken.None);
         responseMessage.EnsureSuccessStatusCode();
         var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
-        Console.WriteLine($"Response: {responseString}");
 
         return JObject.Parse(responseString);
     }
@@ -76,7 +90,7 @@ public class UnitTests
             },
         };
 
-        var ret = Facebook.Read(input, new Options(), default);
+        var ret = Facebook.Read(input, default);
         Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
@@ -96,7 +110,7 @@ public class UnitTests
             },
         };
 
-        var ret = Facebook.Read(input, new Options(), default);
+        var ret = Facebook.Read(input, default);
         Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
@@ -114,7 +128,7 @@ public class UnitTests
             { new KeyValuePair<string, string>("fields", "id,name") },
         };
 
-        var ret = Facebook.Read(input, new Options(), default);
+        var ret = Facebook.Read(input, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -135,7 +149,7 @@ public class UnitTests
             },
         };
 
-        var ret = Facebook.Read(input, new Options(), default);
+        var ret = Facebook.Read(input, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -156,7 +170,7 @@ public class UnitTests
             },
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Read(input, new Options(), default));
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Read(input, default));
         Assert.IsNotNull(ret);
     }
 }

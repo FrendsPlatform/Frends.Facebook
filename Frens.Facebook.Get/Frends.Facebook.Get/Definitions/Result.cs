@@ -6,13 +6,13 @@
 public class Result
 {
     /// <summary>
-    /// Contains the input repeated the specified number of times.
+    /// The GET call was executed successfully.
     /// </summary>
-    /// <example>Example of the output.</example>
+    /// <example>True</example>
     public bool Success { get; private set; }
 
     /// <summary>
-    /// Contains the input repeated the specified number of times.
+    /// Returned message from the interface.
     /// </summary>
     /// <example>Example of the output.</example>
     public dynamic Message { get; private set; }

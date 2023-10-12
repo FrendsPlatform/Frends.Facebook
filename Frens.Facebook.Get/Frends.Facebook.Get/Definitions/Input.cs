@@ -17,9 +17,9 @@ public class Input
     public References Reference { get; set; }
 
     /// <summary>
-    /// Reference is other.
+    /// Reference is other. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference
     /// </summary>
-    /// <example>Insight</example>
+    /// <example>Insights</example>
     [UIHint(nameof(Reference), "", References.Other)]
     [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("Insight")]
