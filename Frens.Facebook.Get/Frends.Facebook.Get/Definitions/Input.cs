@@ -9,14 +9,14 @@ using System.ComponentModel.DataAnnotations;
 public class Input
 {
     /// <summary>
-    /// Sets reference type.
+    /// Gets or sets reference type.
     /// </summary>
     /// <example>Insights.</example>
     [DefaultValue(References.Insights)]
     public References Reference { get; set; }
 
     /// <summary>
-    /// Sets reference when reference is other. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
+    /// Gets or sets reference when reference is other. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
     /// </summary>
     /// <example>Insights.</example>
     [UIHint(nameof(Reference), "", References.Other)]
@@ -25,7 +25,7 @@ public class Input
     public string Other { get; set; }
 
     /// <summary>
-    /// Sets object id of Insight, Page or AD.
+    /// Gets or sets object id of Insight, Page or AD.
     /// </summary>
     /// <example>123456789.</example>
     [DisplayFormat(DataFormatString = "Text")]
@@ -33,13 +33,13 @@ public class Input
     public string ObjectId { get; set; }
 
     /// <summary>
-    /// Sets list of parameters.
+    /// Gets or sets list of parameters.
     /// </summary>
     /// <example>[{ Name, Value }].</example>
     public Parameter[] Parameters { get; set; } = System.Array.Empty<Parameter>();
 
     /// <summary>
-    /// Sets authentication bearer token.
+    /// Gets or sets authentication bearer token.
     /// </summary>
     /// <example>BearerToken1234.</example>
     [PasswordPropertyText]

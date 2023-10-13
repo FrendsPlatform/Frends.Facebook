@@ -8,14 +8,14 @@ using System.ComponentModel.DataAnnotations;
 public class Parameter
 {
     /// <summary>
-    /// Sets the name of the parameter.
+    /// Gets or sets the name of the parameter.
     /// </summary>
     /// <example>Name.</example>
     [DisplayFormat(DataFormatString = "Text")]
     public string Name { get; set; }
 
     /// <summary>
-    /// Sets the value of the parameter.
+    /// Gets or sets the value of the parameter.
     /// </summary>
     /// <example>Value.</example>
     [DisplayFormat(DataFormatString = "Text")]
