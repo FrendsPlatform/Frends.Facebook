@@ -36,14 +36,15 @@ public class Input
     /// <summary>
     /// List of parameters
     /// </summary>
-    /// <example>Key: 1, Value: 123456789</example>
-    public List<KeyValuePair<string, string>> Parameters { get; set; }
+    /// <example>[{ Name, Value }]</example>
+    public Parameter[] Parameters { get; set; } = System.Array.Empty<Parameter>();
 
     /// <summary>
     /// Authentication bearer token.
     /// </summary>
     /// <example>BearerToken1234</example>
     [PasswordPropertyText]
+    [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("BearerToken1234")]
     public string Token { get; set; }
 }

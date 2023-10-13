@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 [TestFixture]
 public class UnitTests
@@ -83,14 +84,10 @@ public class UnitTests
             Reference = References.Insights,
             ObjectId = _objectId,
             Token = _token,
-            Parameters = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("metric", "page_impressions_unique"),
-                new KeyValuePair<string, string>("metric", "post_reactions_love_total"),
-            },
+            Parameters = new Parameter[] { new Parameter { Name = "metric", Value = "page_impressions_unique" }, new Parameter { Name = "metric", Value = "post_reactions_love_total" } },
         };
 
-        var ret = Facebook.Read(input, default);
+        var ret = Facebook.Get(input, default);
         Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
@@ -103,14 +100,10 @@ public class UnitTests
         {
             Reference = References.ADS,
             Token = _token,
-            Parameters = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("ad_reached_countries", "ALL"),
-                new KeyValuePair<string, string>("ad_type", "POLITICAL_AND_ISSUE_ADS"),
-            },
+            Parameters = new Parameter[] { new Parameter { Name = "ad_reached_countries", Value = "ALL"}, new Parameter { Name = "ad_type", Value = "POLITICAL_AND_ISSUE_ADS" } },
         };
 
-        var ret = Facebook.Read(input, default);
+        var ret = Facebook.Get(input, default);
         Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
@@ -124,11 +117,10 @@ public class UnitTests
             Reference = References.Other,
             Other = "me",
             Token = _token,
-            Parameters = new List<KeyValuePair<string, string>>()
-            { new KeyValuePair<string, string>("fields", "id,name") },
+            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id,name"} },
         };
 
-        var ret = Facebook.Read(input, default);
+        var ret = Facebook.Get(input, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -142,14 +134,10 @@ public class UnitTests
             Reference = References.Other,
             Other = "me",
             Token = _token,
-            Parameters = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("fields", "id"),
-                new KeyValuePair<string, string>("fields", "name"),
-            },
+            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id" }, new Parameter { Name = "fields", Value = "name" } },
         };
 
-        var ret = Facebook.Read(input, default);
+        var ret = Facebook.Get(input, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -163,14 +151,9 @@ public class UnitTests
             Reference = References.Other,
             Other = "me",
             Token = string.Empty,
-            Parameters = new List<KeyValuePair<string, string>>()
-            {
-                new KeyValuePair<string, string>("fields", "id"),
-                new KeyValuePair<string, string>("fields", "name"),
-            },
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Read(input, default));
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, default));
         Assert.IsNotNull(ret);
     }
 }

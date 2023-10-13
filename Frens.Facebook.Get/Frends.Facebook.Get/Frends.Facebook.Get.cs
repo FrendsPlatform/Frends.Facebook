@@ -21,7 +21,7 @@ public static class Facebook
     /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Read([PropertyTab] Input input, CancellationToken cancellationToken)
+    public static async Task<Result> Get([PropertyTab] Input input, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(input.Token))
         {
@@ -76,14 +76,14 @@ public static class Facebook
         {
             url += "?";
 
-            for (int i = 0; i < input.Parameters.Count; i++)
+            for (int i = 0; i < input.Parameters.Length; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (i != 0 && i != input.Parameters.Count)
+                if (i != 0 && i != input.Parameters.Length)
                     url += "&";
 
-                url += $"{input.Parameters[i].Key}={input.Parameters[i].Value}";
+                url += $"{input.Parameters[i].Name}={input.Parameters[i].Value}";
             }
         }
 
