@@ -11,7 +11,7 @@
 	  <PackageTags>Frends</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <Description>Description of the Task</Description>
+	  <Description>Task for fetching data from Facebook API.</Description>
 	  <PackageProjectUrl>https://frends.com/</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/FrendsPlatform/Frends.classNameForTask/tree/main/namespaceForTask</RepositoryUrl>
   </PropertyGroup>
@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Facebook" Version="7.0.6" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
   

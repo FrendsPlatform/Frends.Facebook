@@ -2,6 +2,9 @@
 
 namespace Frends.Facebook.Get.Definitions;
 
+/// <summary>
+/// Parameter class includes name and value.
+/// </summary>
 public class Parameter
 {
     /// <summary>

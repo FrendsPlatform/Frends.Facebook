@@ -1,5 +1,8 @@
 ﻿namespace Frends.Facebook.Get.Definitions;
 
+/// <summary>
+/// Enum class for dropdown choice.
+/// </summary>
 public enum References
 {
     /// <summary>
