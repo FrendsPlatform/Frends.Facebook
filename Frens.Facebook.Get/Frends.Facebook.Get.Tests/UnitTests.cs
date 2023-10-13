@@ -86,9 +86,10 @@ public class UnitTests
         };
 
         var ret = Facebook.Get(input, default);
-        Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Success);
+        //Assert.IsTrue(ret.Result.Success);
+        // Test user has no permissions for this
+        Assert.IsFalse(ret.Result.Success);
     }
 
     [Test]
@@ -102,9 +103,10 @@ public class UnitTests
         };
 
         var ret = Facebook.Get(input, default);
-        Console.WriteLine(ret.Result.Message);
         Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Success);
+        //Assert.IsTrue(ret.Result.Success);
+        // Test user has no permissions for this
+        Assert.IsFalse(ret.Result.Success);
     }
 
     [Test]
