@@ -17,7 +17,7 @@ public class Result
     /// <example>Example of the output.</example>
     public dynamic Message { get; private set; }
 
-    public Result(bool success, object message)
+    internal Result(bool success, object message)
     {
         this.Success = success;
         this.Message = message;
