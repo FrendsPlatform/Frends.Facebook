@@ -4,11 +4,9 @@ using Frends.Facebook.Get.Definitions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 [TestFixture]
 public class UnitTests
@@ -48,13 +46,13 @@ public class UnitTests
         }*/
 
         // Fetch App Id
-        try 
+        try
         {
             var appUrl = @"https://graph.facebook.com/v18.0/me";
             var result = await GetAsync(appUrl, _token);
             _objectId = (string)result["id"];
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             Console.WriteLine(e);
         }
@@ -67,7 +65,7 @@ public class UnitTests
             Method = HttpMethod.Get,
             RequestUri = new Uri(url),
         };
-        if(!string.IsNullOrEmpty(token)) request.Headers.Add("Authorization","Bearer " + token);
+        if (!string.IsNullOrEmpty(token)) request.Headers.Add("Authorization", "Bearer " + token);
 
         var responseMessage = _client.Send(request, CancellationToken.None);
         responseMessage.EnsureSuccessStatusCode();
@@ -100,7 +98,7 @@ public class UnitTests
         {
             Reference = References.ADS,
             Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "ad_reached_countries", Value = "ALL"}, new Parameter { Name = "ad_type", Value = "POLITICAL_AND_ISSUE_ADS" } },
+            Parameters = new Parameter[] { new Parameter { Name = "ad_reached_countries", Value = "ALL" }, new Parameter { Name = "ad_type", Value = "POLITICAL_AND_ISSUE_ADS" } },
         };
 
         var ret = Facebook.Get(input, default);
@@ -117,7 +115,7 @@ public class UnitTests
             Reference = References.Other,
             Other = "me",
             Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id,name"} },
+            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id,name" } },
         };
 
         var ret = Facebook.Get(input, default);

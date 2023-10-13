@@ -1,11 +1,11 @@
 ﻿namespace Frends.Facebook.Get;
 
+using Frends.Facebook.Get.Definitions;
 using System;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Frends.Facebook.Get.Definitions;
 
 /// <summary>
 /// Facebook class.
