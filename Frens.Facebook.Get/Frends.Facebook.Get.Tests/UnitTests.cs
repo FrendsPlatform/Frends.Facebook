@@ -16,7 +16,7 @@ public class UnitTests
     //private readonly string _clientSecret = "clientSecret";
     //privare readonly string _facebookId = "facebookId";
 
-    private string _token = Environment.GetEnvironmentVariable("Facebook_token");
+    private readonly string _token = Environment.GetEnvironmentVariable("Facebook_token");
 
     internal static readonly HttpClient _client = new HttpClient();
 
