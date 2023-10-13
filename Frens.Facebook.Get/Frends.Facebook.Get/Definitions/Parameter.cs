@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Frends.Facebook.Get.Definitions;
 
-namespace Frends.Facebook.Get.Definitions;
+using System.ComponentModel.DataAnnotations;
 
 /// <summary>
 /// Parameter class includes name and value.
@@ -8,16 +8,16 @@ namespace Frends.Facebook.Get.Definitions;
 public class Parameter
 {
     /// <summary>
-    /// Name of the parameter.
+    /// Sets the name of the parameter.
     /// </summary>
-    /// <example>Name</example>
+    /// <example>Name.</example>
     [DisplayFormat(DataFormatString = "Text")]
     public string Name { get; set; }
 
     /// <summary>
-    /// Value of the parameter.
+    /// Sets the value of the parameter.
     /// </summary>
-    /// <example>Value</example>
+    /// <example>Value.</example>
     [DisplayFormat(DataFormatString = "Text")]
     public string Value { get; set; }
 }

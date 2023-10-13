@@ -6,20 +6,25 @@
 public class Result
 {
     /// <summary>
-    /// The GET call was executed successfully.
+    /// Initializes a new instance of the <see cref="Result"/> class.
     /// </summary>
-    /// <example>True</example>
-    public bool Success { get; private set; }
-
-    /// <summary>
-    /// Returned message from the interface.
-    /// </summary>
-    /// <example>Example of the output.</example>
-    public dynamic Message { get; private set; }
-
+    /// <param name="success">Indicates whether GET call was executed succesfully.</param>
+    /// <param name="message">Returns the message from the interface.</param>
     internal Result(bool success, object message)
     {
         this.Success = success;
         this.Message = message;
     }
+
+    /// <summary>
+    /// Gets a value indicating whether GET call was executed successfully.
+    /// </summary>
+    /// <example>True.</example>
+    public bool Success { get; private set; }
+
+    /// <summary>
+    /// Gets message from the interface.
+    /// </summary>
+    /// <example>Example of the output.</example>
+    public dynamic Message { get; private set; }
 }
