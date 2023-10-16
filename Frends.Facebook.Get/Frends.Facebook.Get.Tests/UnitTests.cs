@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 public class UnitTests
 {
     private string _objectId;
-    //private readonly string _clientId = "clientId";
-    //private readonly string _clientSecret = "clientSecret";
-    //privare readonly string _facebookId = "facebookId";
+    /*private readonly string _clientId = "clientId";
+    private readonly string _clientSecret = "clientSecret";
+    privare readonly string _facebookId = "facebookId";*/
 
     private readonly string _token = Environment.GetEnvironmentVariable("Facebook_token");
     internal static readonly HttpClient _client = new HttpClient();
