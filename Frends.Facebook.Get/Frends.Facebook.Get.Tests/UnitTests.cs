@@ -17,7 +17,6 @@ public class UnitTests
     //privare readonly string _facebookId = "facebookId";
 
     private readonly string _token = Environment.GetEnvironmentVariable("Facebook_token");
-
     internal static readonly HttpClient _client = new HttpClient();
 
     //Todo: Create Page Access Token
