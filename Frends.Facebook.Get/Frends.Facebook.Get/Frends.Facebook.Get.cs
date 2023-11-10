@@ -21,11 +21,11 @@ public static class Facebook
     /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Get([PropertyTab] Input input, CancellationToken cancellationToken)
+    public static async Task<Result> Get([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(input.Token))
+        if (string.IsNullOrEmpty(input.AccessToken))
         {
-            throw new ArgumentNullException(nameof(input.Token) + " cannot be empty.");
+            throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
         }
 
         try
@@ -37,23 +37,30 @@ public static class Facebook
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(url),
             };
-            request.Headers.Add("Authorization", "Bearer " + input.Token);
+            request.Headers.Add("Authorization", "Bearer " + input.AccessToken);
 
-            var responseMessage = _client.Send(request, cancellationToken);
+            var responseMessage = await _client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
-            var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            var responseString = string.Empty;
+            #if NETSTANDARD2_0
+            responseString = await responseMessage.Content.ReadAsStringAsync();
+            #elif NET6_0_OR_GREATER
+            responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            #endif
 
             return new Result(true, responseString);
         }
         catch (Exception ex)
         {
+            if (options.ThrowErrorOnFailure)
+                throw new Exception(ex.Message, ex.InnerException);
             return new Result(false, ex.Message);
         }
     }
 
     private static string GetUrl(Input input, CancellationToken cancellationToken)
     {
-        var url = "https://graph.facebook.com/v18.0/";
+        var url = "https://graph.facebook.com/" + input.ApiVersion.Trim() + "/";
 
         // Set url base
         switch (input.Reference)
@@ -70,21 +77,6 @@ public static class Facebook
             case References.Other:
                 url += input.Other;
                 break;
-        }
-
-        if (input.Parameters != null)
-        {
-            url += "?";
-
-            for (int i = 0; i < input.Parameters.Length; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (i != 0 && i != input.Parameters.Length)
-                    url += "&";
-
-                url += $"{input.Parameters[i].Name}={input.Parameters[i].Value}";
-            }
         }
 
         return url;

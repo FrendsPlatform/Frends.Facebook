@@ -33,10 +33,12 @@ public class Input
     public string ObjectId { get; set; }
 
     /// <summary>
-    /// Gets or sets list of parameters.
+    /// Gets or sets API version.
     /// </summary>
-    /// <example>[{ Name, Value }].</example>
-    public Parameter[] Parameters { get; set; } = System.Array.Empty<Parameter>();
+    /// <example>18.0</example>
+    [DisplayFormat(DataFormatString = "Text")]
+    [DefaultValue("18.0")]
+    public string ApiVersion { get; set; }
 
     /// <summary>
     /// Gets or sets authentication bearer token.
@@ -45,5 +47,5 @@ public class Input
     [PasswordPropertyText]
     [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("BearerToken1234")]
-    public string Token { get; set; }
+    public string AccessToken { get; set; }
 }
