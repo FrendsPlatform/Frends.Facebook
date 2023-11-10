@@ -78,7 +78,7 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "/insights?metric=page_impressions_unique&metric=post_reactions_love_total",
+            References = "insights?metric=page_impressions_unique&metric=post_reactions_love_total",
             ObjectId = _objectId,
             AccessToken = _token,
             ApiVersion = "18.0",

@@ -33,12 +33,12 @@ public static class Facebook
         }
         else if (string.IsNullOrEmpty(input.ObjectId) && string.IsNullOrEmpty(input.References))
         {
-            throw new ArgumentNullException("Both values of " + nameof(input.ObjectId) + " or " + nameof(input.References) + " cannot be empty.");
+            throw new ArgumentNullException("Both values " + nameof(input.ObjectId) + " or " + nameof(input.References) + " cannot be empty.");
         }
 
         try
         {
-            var url = $@"https://graph.facebook.com/v{input.ApiVersion}/{input.ObjectId}{input.References}";
+            var url = GetUrl(input, cancellationToken);
 
             var request = new HttpRequestMessage
             {
@@ -64,5 +64,25 @@ public static class Facebook
                 throw new Exception(ex.Message, ex.InnerException);
             return new Result(false, ex.Message);
         }
+    }
+
+    private static string GetUrl(Input input, CancellationToken cancellationToken)
+    {
+        var url = $@"https://graph.facebook.com/v{input.ApiVersion}/";
+
+        if (!string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
+        {
+            url += input.ObjectId + "/" + input.References;
+        }
+        else if (string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
+        {
+            url += input.References;
+        }
+        else
+        {
+            url += input.ObjectId;
+        }
+
+        return url;
     }
 }
