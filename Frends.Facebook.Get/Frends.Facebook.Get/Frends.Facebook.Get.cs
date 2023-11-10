@@ -27,10 +27,18 @@ public static class Facebook
         {
             throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
         }
+        else if (string.IsNullOrEmpty(input.ApiVersion))
+        {
+            throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
+        }
+        else if (string.IsNullOrEmpty(input.ObjectId) && string.IsNullOrEmpty(input.References))
+        {
+            throw new ArgumentNullException("Both values of " + nameof(input.ObjectId) + " or " + nameof(input.References) + " cannot be empty.");
+        }
 
         try
         {
-            var url = GetUrl(input, cancellationToken);
+            var url = $@"https://graph.facebook.com/v{input.ApiVersion}/{input.ObjectId}{input.References}";
 
             var request = new HttpRequestMessage
             {
@@ -56,29 +64,5 @@ public static class Facebook
                 throw new Exception(ex.Message, ex.InnerException);
             return new Result(false, ex.Message);
         }
-    }
-
-    private static string GetUrl(Input input, CancellationToken cancellationToken)
-    {
-        var url = "https://graph.facebook.com/" + input.ApiVersion.Trim() + "/";
-
-        // Set url base
-        switch (input.Reference)
-        {
-            case References.Insights:
-                url += input.ObjectId + "/insights";
-                break;
-            case References.Pages:
-                url += input.ObjectId;
-                break;
-            case References.ADS:
-                url += "ads_archive";
-                break;
-            case References.Other:
-                url += input.Other;
-                break;
-        }
-
-        return url;
     }
 }

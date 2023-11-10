@@ -9,20 +9,11 @@ using System.ComponentModel.DataAnnotations;
 public class Input
 {
     /// <summary>
-    /// Gets or sets reference type.
+    /// Gets or sets reference type. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
     /// </summary>
-    /// <example>Insights.</example>
-    [DefaultValue(References.Insights)]
-    public References Reference { get; set; }
-
-    /// <summary>
-    /// Gets or sets reference when reference is other. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
-    /// </summary>
-    /// <example>Insights.</example>
-    [UIHint(nameof(Reference), "", References.Other)]
-    [DisplayFormat(DataFormatString = "Text")]
-    [DefaultValue("Insight")]
-    public string Other { get; set; }
+    /// <example>/insights?metrics=id,name</example>
+    [DefaultValue("Insights")]
+    public string References { get; set; }
 
     /// <summary>
     /// Gets or sets object id of Insight, Page or AD.

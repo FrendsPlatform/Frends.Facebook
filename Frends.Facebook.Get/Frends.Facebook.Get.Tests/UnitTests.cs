@@ -78,13 +78,13 @@ public class UnitTests
     {
         var input = new Input
         {
-            Reference = References.Insights,
+            References = "/insights?metric=page_impressions_unique&metric=post_reactions_love_total",
             ObjectId = _objectId,
-            Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "metric", Value = "page_impressions_unique" }, new Parameter { Name = "metric", Value = "post_reactions_love_total" } },
+            AccessToken = _token,
+            ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, default);
+        var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
         //Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
@@ -96,12 +96,12 @@ public class UnitTests
     {
         var input = new Input
         {
-            Reference = References.ADS,
-            Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "ad_reached_countries", Value = "ALL" }, new Parameter { Name = "ad_type", Value = "POLITICAL_AND_ISSUE_ADS" } },
+            References = "ads_archive?ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
+            AccessToken = _token,
+            ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, default);
+        var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
         //Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
@@ -113,13 +113,12 @@ public class UnitTests
     {
         var input = new Input
         {
-            Reference = References.Other,
-            Other = "me",
-            Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id,name" } },
+            References = "me?fields=id,name",
+            AccessToken = _token,
+            ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, default);
+        var ret = Facebook.Get(input, new Options { ThrowErrorOnFailure = true }, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -130,13 +129,12 @@ public class UnitTests
     {
         var input = new Input
         {
-            Reference = References.Other,
-            Other = "me",
-            Token = _token,
-            Parameters = new Parameter[] { new Parameter { Name = "fields", Value = "id" }, new Parameter { Name = "fields", Value = "name" } },
+            References = "me?fields=id&fields=name",
+            AccessToken = _token,
+            ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, default);
+        var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(_objectId));
@@ -147,12 +145,12 @@ public class UnitTests
     {
         var input = new Input
         {
-            Reference = References.Other,
-            Other = "me",
-            Token = string.Empty,
+            References = "me",
+            AccessToken = string.Empty,
+            ApiVersion = "18.0",
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, default));
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, new Options(), default));
         Assert.IsNotNull(ret);
     }
 }
