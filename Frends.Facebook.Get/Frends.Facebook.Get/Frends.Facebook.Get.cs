@@ -51,11 +51,11 @@ public static class Facebook
             var responseMessage = await client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = string.Empty;
-            #if NETSTANDARD2_0
+#if NETSTANDARD2_0
             responseString = await responseMessage.Content.ReadAsStringAsync();
-            #elif NET6_0_OR_GREATER
+#elif NET6_0_OR_GREATER
             responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-            #endif
+#endif
 
             return new Result(true, responseString);
         }
