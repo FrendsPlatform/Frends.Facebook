@@ -39,7 +39,7 @@ public static class Facebook
 
         try
         {
-            HttpClient client = new ();
+            HttpClient client = new HttpClient();
 
             var url = GetUrl(input, cancellationToken);
 
