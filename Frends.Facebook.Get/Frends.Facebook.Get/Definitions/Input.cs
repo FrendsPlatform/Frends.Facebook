@@ -12,6 +12,7 @@ public class Input
     /// Gets or sets reference type. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
     /// </summary>
     /// <example>insights?metrics=id,name</example>
+    [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("Insights")]
     public string References { get; set; }
 
