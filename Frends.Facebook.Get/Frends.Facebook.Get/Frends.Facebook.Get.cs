@@ -1,11 +1,14 @@
-﻿using Frends.Facebook.Get.Definitions;
+﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
+
 using System;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Frends.Facebook.Get.Definitions;
 
 namespace Frends.Facebook.Get;
+
 /// <summary>
 /// Facebook class.
 /// </summary>
