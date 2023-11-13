@@ -19,6 +19,7 @@ public static class Facebook
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
     /// </summary>
     /// <param name="input">Set reference type, parameters and token.</param>
+    /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
     public static async Task<Result> Get([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
@@ -61,7 +62,10 @@ public static class Facebook
         catch (Exception ex)
         {
             if (options.ThrowErrorOnFailure)
+            {
                 throw new Exception(ex.Message, ex.InnerException);
+            }
+
             return new Result(false, ex.Message);
         }
     }
