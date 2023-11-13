@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+	  <TargetFrameworks>netstandard2.0;net471;net6.0</TargetFrameworks>
 	  <LangVersion>Latest</LangVersion>
 	  <Version>1.0.1</Version>
 	  <Authors>Frends</Authors>
@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
   
@@ -39,6 +38,10 @@
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	</PackageReference>
   </ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net471'">
+		<Reference Include="System.Net.Http" />
+	</ItemGroup>
 
 </Project>
 

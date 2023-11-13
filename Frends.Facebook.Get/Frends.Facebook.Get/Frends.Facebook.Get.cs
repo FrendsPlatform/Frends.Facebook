@@ -1,12 +1,11 @@
-﻿namespace Frends.Facebook.Get;
-
-using Frends.Facebook.Get.Definitions;
+﻿using Frends.Facebook.Get.Definitions;
 using System;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
+namespace Frends.Facebook.Get;
 /// <summary>
 /// Facebook class.
 /// </summary>
@@ -37,7 +36,7 @@ public static class Facebook
 
         try
         {
-            HttpClient client = new HttpClient();
+            HttpClient client = new ();
 
             var url = GetUrl(input, cancellationToken);
 
@@ -52,6 +51,8 @@ public static class Facebook
             responseMessage.EnsureSuccessStatusCode();
             var responseString = string.Empty;
 #if NETSTANDARD2_0
+            responseString = await responseMessage.Content.ReadAsStringAsync();
+#elif NET471
             responseString = await responseMessage.Content.ReadAsStringAsync();
 #elif NET6_0_OR_GREATER
             responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
