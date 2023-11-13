@@ -12,8 +12,6 @@ using System.Threading.Tasks;
 /// </summary>
 public static class Facebook
 {
-    internal static readonly HttpClient _client = new HttpClient();
-
     /// <summary>
     /// This is task for reading data from Facebook API.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
@@ -39,6 +37,8 @@ public static class Facebook
 
         try
         {
+            HttpClient client = new HttpClient();
+
             var url = GetUrl(input, cancellationToken);
 
             var request = new HttpRequestMessage
@@ -48,7 +48,7 @@ public static class Facebook
             };
             request.Headers.Add("Authorization", "Bearer " + input.AccessToken);
 
-            var responseMessage = await _client.SendAsync(request, cancellationToken);
+            var responseMessage = await client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = string.Empty;
             #if NETSTANDARD2_0
