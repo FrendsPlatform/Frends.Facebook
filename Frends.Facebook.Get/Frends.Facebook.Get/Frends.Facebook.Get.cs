@@ -72,7 +72,7 @@ public static class Facebook
         }
     }
 
-    private static string GetUrl(Input input, CancellationToken cancellationToken)
+    private static string GetUrl(Input input)
     {
         var url = $@"https://graph.facebook.com/v{input.ApiVersion}/";
 
