@@ -53,9 +53,7 @@ public static class Facebook
             var responseMessage = await client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = string.Empty;
-#if NETSTANDARD2_0
-            responseString = await responseMessage.Content.ReadAsStringAsync();
-#elif NET471
+#if NET471
             responseString = await responseMessage.Content.ReadAsStringAsync();
 #elif NET6_0_OR_GREATER
             responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
