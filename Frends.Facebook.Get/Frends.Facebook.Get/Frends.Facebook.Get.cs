@@ -1,90 +1,92 @@
-﻿namespace Frends.Facebook.Get;
+﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
 
-using Frends.Facebook.Get.Definitions;
 using System;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Frends.Facebook.Get.Definitions;
+
+namespace Frends.Facebook.Get;
 
 /// <summary>
 /// Facebook class.
 /// </summary>
 public static class Facebook
 {
-    internal static readonly HttpClient _client = new HttpClient();
-
     /// <summary>
     /// This is task for reading data from Facebook API.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
     /// </summary>
     /// <param name="input">Set reference type, parameters and token.</param>
+    /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Get([PropertyTab] Input input, CancellationToken cancellationToken)
+    public static async Task<Result> Get([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(input.Token))
+        if (string.IsNullOrEmpty(input.AccessToken))
         {
-            throw new ArgumentNullException(nameof(input.Token) + " cannot be empty.");
+            throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
+        }
+        else if (string.IsNullOrEmpty(input.ApiVersion))
+        {
+            throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
+        }
+        else if (string.IsNullOrEmpty(input.ObjectId) && string.IsNullOrEmpty(input.References))
+        {
+            throw new ArgumentNullException("Both values " + nameof(input.ObjectId) + " or " + nameof(input.References) + " cannot be empty.");
         }
 
         try
         {
-            var url = GetUrl(input, cancellationToken);
+            HttpClient client = new HttpClient();
+
+            var url = GetUrl(input);
 
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(url),
             };
-            request.Headers.Add("Authorization", "Bearer " + input.Token);
+            request.Headers.Add("Authorization", "Bearer " + input.AccessToken);
 
-            var responseMessage = _client.Send(request, cancellationToken);
+            var responseMessage = await client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
-            var responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            var responseString = string.Empty;
+#if NET471
+            responseString = await responseMessage.Content.ReadAsStringAsync();
+#elif NET6_0_OR_GREATER
+            responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+#endif
 
             return new Result(true, responseString);
         }
         catch (Exception ex)
         {
+            if (options.ThrowErrorOnFailure)
+            {
+                throw new Exception(ex.Message, ex.InnerException);
+            }
+
             return new Result(false, ex.Message);
         }
     }
 
-    private static string GetUrl(Input input, CancellationToken cancellationToken)
+    private static string GetUrl(Input input)
     {
-        var url = "https://graph.facebook.com/v18.0/";
+        var url = $@"https://graph.facebook.com/v{input.ApiVersion}/";
 
-        // Set url base
-        switch (input.Reference)
+        if (!string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
         {
-            case References.Insights:
-                url += input.ObjectId + "/insights";
-                break;
-            case References.Pages:
-                url += input.ObjectId;
-                break;
-            case References.ADS:
-                url += "ads_archive";
-                break;
-            case References.Other:
-                url += input.Other;
-                break;
+            url += input.ObjectId + "/" + input.References;
         }
-
-        if (input.Parameters != null)
+        else if (string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
         {
-            url += "?";
-
-            for (int i = 0; i < input.Parameters.Length; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                if (i != 0 && i != input.Parameters.Length)
-                    url += "&";
-
-                url += $"{input.Parameters[i].Name}={input.Parameters[i].Value}";
-            }
+            url += input.References;
+        }
+        else
+        {
+            url += input.ObjectId;
         }
 
         return url;
