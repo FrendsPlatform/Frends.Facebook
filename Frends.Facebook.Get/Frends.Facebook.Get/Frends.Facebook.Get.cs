@@ -41,7 +41,7 @@ public static class Facebook
         {
             HttpClient client = new HttpClient();
 
-            var url = GetUrl(input, cancellationToken);
+            var url = GetUrl(input);
 
             var request = new HttpRequestMessage
             {
