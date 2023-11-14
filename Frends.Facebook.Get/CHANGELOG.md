@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.1] - 2023-11-14
+### Changed
+- Multitarget support to net 6.0 and framework 4.7.1
+
 ## [1.0.0] - 2023-10-13
 ### Changed
 - Initial implementation
