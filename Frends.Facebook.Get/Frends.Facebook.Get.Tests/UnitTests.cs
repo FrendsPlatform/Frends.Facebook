@@ -78,8 +78,8 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "insights?metric=page_impressions_unique&metric=post_reactions_love_total",
-            ObjectId = _objectId,
+            QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
+            Reference = "insights",
             AccessToken = _token,
             ApiVersion = "18.0",
         };
@@ -96,7 +96,8 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "ads_archive?ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
+            Reference = "ads_archive",
+            QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
             AccessToken = _token,
             ApiVersion = "18.0",
         };
@@ -113,7 +114,8 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "me?fields=id,name",
+            Reference = "me",
+            QueryParameters = "fields=id,name",
             AccessToken = _token,
             ApiVersion = "18.0",
         };
@@ -129,7 +131,8 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "me?fields=id&fields=name",
+            Reference = "me",
+            QueryParameters = "fields=id&fields=name",
             AccessToken = _token,
             ApiVersion = "18.0",
         };
@@ -145,7 +148,7 @@ public class UnitTests
     {
         var input = new Input
         {
-            References = "me",
+            Reference = "me",
             AccessToken = string.Empty,
             ApiVersion = "18.0",
         };
