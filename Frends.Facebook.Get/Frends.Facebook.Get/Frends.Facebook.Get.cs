@@ -32,16 +32,14 @@ public static class Facebook
         {
             throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
         }
-        else if (string.IsNullOrEmpty(input.ObjectId) && string.IsNullOrEmpty(input.References))
+        else if (string.IsNullOrEmpty(input.Reference))
         {
-            throw new ArgumentNullException("Both values " + nameof(input.ObjectId) + " or " + nameof(input.References) + " cannot be empty.");
+            throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
         }
 
         try
         {
-            HttpClient client = new HttpClient();
-
-            var url = GetUrl(input);
+            var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
 
             var request = new HttpRequestMessage
             {
@@ -50,6 +48,7 @@ public static class Facebook
             };
             request.Headers.Add("Authorization", "Bearer " + input.AccessToken);
 
+            using HttpClient client = new HttpClient();
             var responseMessage = await client.SendAsync(request, cancellationToken);
             responseMessage.EnsureSuccessStatusCode();
             var responseString = string.Empty;
@@ -70,25 +69,5 @@ public static class Facebook
 
             return new Result(false, ex.Message);
         }
-    }
-
-    private static string GetUrl(Input input)
-    {
-        var url = $@"https://graph.facebook.com/v{input.ApiVersion}/";
-
-        if (!string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
-        {
-            url += input.ObjectId + "/" + input.References;
-        }
-        else if (string.IsNullOrEmpty(input.ObjectId) && !string.IsNullOrEmpty(input.References))
-        {
-            url += input.References;
-        }
-        else
-        {
-            url += input.ObjectId;
-        }
-
-        return url;
     }
 }
