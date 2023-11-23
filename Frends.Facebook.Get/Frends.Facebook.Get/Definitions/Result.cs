@@ -1,4 +1,5 @@
-﻿namespace Frends.Facebook.Get.Definitions;
+﻿#pragma warning disable SA1629 // Documentation text should end with a period.
+namespace Frends.Facebook.Get.Definitions;
 
 /// <summary>
 /// Result class usually contains properties of the return object.
@@ -25,6 +26,6 @@ public class Result
     /// <summary>
     /// Gets message from the interface.
     /// </summary>
-    /// <example>Example of the output.</example>
+    /// <example>{ "id": 123456789, "name": "UserName" }</example>
     public dynamic Message { get; private set; }
 }
