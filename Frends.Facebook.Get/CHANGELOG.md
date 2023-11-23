@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2023-11-23
+### Changed
+- Documenation updated
+
 ## [1.1.1] - 2023-11-15
 ### Changed
 - Memory leak fixed
