@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.1] - 2023-11-23
+## [1.1.2] - 2023-11-27
 ### Changed
 - Documenation updated
 

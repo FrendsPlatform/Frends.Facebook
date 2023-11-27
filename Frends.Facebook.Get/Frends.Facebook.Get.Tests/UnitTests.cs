@@ -9,17 +9,18 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [TestFixture]
+#pragma warning disable SA1600 // Elements should be documented
 public class UnitTests
 {
-    private string _objectId;
+    internal static readonly HttpClient Client = new HttpClient();
+    private readonly string token = Environment.GetEnvironmentVariable("Facebook_token");
+
+    private string objectId;
     /*private readonly string _clientId = "clientId";
     private readonly string _clientSecret = "clientSecret";
     privare readonly string _facebookId = "facebookId";*/
 
-    private readonly string _token = Environment.GetEnvironmentVariable("Facebook_token");
-    internal static readonly HttpClient _client = new HttpClient();
-
-    //Todo: Create Page Access Token
+    // Todo: Create Page Access Token
     [SetUp]
     public async Task SetUp()
     {
@@ -48,29 +49,13 @@ public class UnitTests
         try
         {
             var appUrl = @"https://graph.facebook.com/v18.0/me";
-            var result = await GetAsync(appUrl, _token);
-            _objectId = (string)result["id"];
+            var result = await GetAsync(appUrl, this.token);
+            this.objectId = (string)result["id"];
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
-    }
-
-    private static async Task<JObject> GetAsync(string url, string token)
-    {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(url),
-        };
-        if (!string.IsNullOrEmpty(token)) request.Headers.Add("Authorization", "Bearer " + token);
-
-        var responseMessage = _client.Send(request, CancellationToken.None);
-        responseMessage.EnsureSuccessStatusCode();
-        var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
-
-        return JObject.Parse(responseString);
     }
 
     [Test]
@@ -80,13 +65,14 @@ public class UnitTests
         {
             QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
             Reference = "insights",
-            AccessToken = _token,
+            AccessToken = this.token,
             ApiVersion = "18.0",
         };
 
         var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
-        //Assert.IsTrue(ret.Result.Success);
+
+        // Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
         Assert.IsFalse(ret.Result.Success);
     }
@@ -98,13 +84,14 @@ public class UnitTests
         {
             Reference = "ads_archive",
             QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
-            AccessToken = _token,
+            AccessToken = this.token,
             ApiVersion = "18.0",
         };
 
         var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
-        //Assert.IsTrue(ret.Result.Success);
+
+        // Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
         Assert.IsFalse(ret.Result.Success);
     }
@@ -116,14 +103,14 @@ public class UnitTests
         {
             Reference = "me",
             QueryParameters = "fields=id,name",
-            AccessToken = _token,
+            AccessToken = this.token,
             ApiVersion = "18.0",
         };
 
         var ret = Facebook.Get(input, new Options { ThrowErrorOnFailure = true }, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(_objectId));
+        Assert.IsTrue(ret.Result.Message.Contains(this.objectId));
     }
 
     [Test]
@@ -133,14 +120,14 @@ public class UnitTests
         {
             Reference = "me",
             QueryParameters = "fields=id&fields=name",
-            AccessToken = _token,
+            AccessToken = this.token,
             ApiVersion = "18.0",
         };
 
         var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(_objectId));
+        Assert.IsTrue(ret.Result.Message.Contains(this.objectId));
     }
 
     [Test]
@@ -155,5 +142,24 @@ public class UnitTests
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, new Options(), default));
         Assert.IsNotNull(ret);
+    }
+
+    private static async Task<JObject> GetAsync(string url, string token)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(url),
+        };
+        if (!string.IsNullOrEmpty(token))
+        {
+            request.Headers.Add("Authorization", "Bearer " + token);
+        }
+
+        var responseMessage = Client.Send(request, CancellationToken.None);
+        responseMessage.EnsureSuccessStatusCode();
+        var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
+
+        return JObject.Parse(responseString);
     }
 }
