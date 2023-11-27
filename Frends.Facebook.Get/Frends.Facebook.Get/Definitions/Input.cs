@@ -1,5 +1,4 @@
-﻿#pragma warning disable SA1629 // Documentation text should end with a period.
-namespace Frends.Facebook.Get.Definitions;
+﻿namespace Frends.Facebook.Get.Definitions;
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

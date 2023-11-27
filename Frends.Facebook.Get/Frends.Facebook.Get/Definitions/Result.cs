@@ -25,6 +25,6 @@ public class Result
     /// <summary>
     /// Gets message from the interface.
     /// </summary>
-    /// <example>Example of the output.</example>
+    /// <example>{ "id": 123456789, "name": "UserName" }</example>
     public dynamic Message { get; private set; }
 }
