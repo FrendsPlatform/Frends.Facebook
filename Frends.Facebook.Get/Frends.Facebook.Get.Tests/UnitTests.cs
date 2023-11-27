@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [TestFixture]
-#pragma warning disable SA1600 // Elements should be documented
 public class UnitTests
 {
     internal static readonly HttpClient Client = new HttpClient();
@@ -50,7 +49,7 @@ public class UnitTests
         {
             var appUrl = @"https://graph.facebook.com/v18.0/me";
             var result = await GetAsync(appUrl, this.token);
-            this.objectId = (string)result["id"];
+            objectId = (string)result["id"];
         }
         catch (Exception e)
         {
@@ -110,7 +109,7 @@ public class UnitTests
         var ret = Facebook.Get(input, new Options { ThrowErrorOnFailure = true }, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(this.objectId));
+        Assert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
     [Test]
@@ -127,7 +126,7 @@ public class UnitTests
         var ret = Facebook.Get(input, new Options(), default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(this.objectId));
+        Assert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
     [Test]
