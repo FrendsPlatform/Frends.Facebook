@@ -48,7 +48,7 @@ public class UnitTests
         try
         {
             var appUrl = @"https://graph.facebook.com/v18.0/me";
-            var result = await GetAsync(appUrl, this.token);
+            var result = await GetAsync(appUrl, token);
             objectId = (string)result["id"];
         }
         catch (Exception e)
@@ -64,7 +64,7 @@ public class UnitTests
         {
             QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
             Reference = "insights",
-            AccessToken = this.token,
+            AccessToken = token,
             ApiVersion = "18.0",
         };
 
@@ -83,7 +83,7 @@ public class UnitTests
         {
             Reference = "ads_archive",
             QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
-            AccessToken = this.token,
+            AccessToken = token,
             ApiVersion = "18.0",
         };
 
@@ -102,7 +102,7 @@ public class UnitTests
         {
             Reference = "me",
             QueryParameters = "fields=id,name",
-            AccessToken = this.token,
+            AccessToken = token,
             ApiVersion = "18.0",
         };
 
@@ -119,7 +119,7 @@ public class UnitTests
         {
             Reference = "me",
             QueryParameters = "fields=id&fields=name",
-            AccessToken = this.token,
+            AccessToken = token,
             ApiVersion = "18.0",
         };
 
