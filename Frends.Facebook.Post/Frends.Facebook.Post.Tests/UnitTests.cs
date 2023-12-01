@@ -1,6 +1,6 @@
 namespace Frends.Facebook.Post.Tests;
 
-using Frends.Facebook.Get.Definitions;
+using Frends.Facebook.Post.Definitions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
@@ -58,75 +58,23 @@ public class UnitTests
     }
 
     [Test]
-    public void TestGetInsights()
+    public async Task TestPostToPageAsync()
     {
         var input = new Input
         {
-            QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
-            Reference = "insights",
+            Reference = objectId + "/feed",
             AccessToken = token,
             ApiVersion = "18.0",
+            Data = "{ \"message\": \"This is a test.\" }",
         };
 
-        var ret = Facebook.Get(input, new Options(), default);
+        var ret = Facebook.Post(input, new Options(), default);
         Assert.IsNotNull(ret);
+        Console.WriteLine(ret.Result.Message);
 
-        // Assert.IsTrue(ret.Result.Success);
+        //Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
         Assert.IsFalse(ret.Result.Success);
-    }
-
-    [Test]
-    public void TestGetADS()
-    {
-        var input = new Input
-        {
-            Reference = "ads_archive",
-            QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Facebook.Get(input, new Options(), default);
-        Assert.IsNotNull(ret);
-
-        // Assert.IsTrue(ret.Result.Success);
-        // Test user has no permissions for this
-        Assert.IsFalse(ret.Result.Success);
-    }
-
-    [Test]
-    public void TestGetOther()
-    {
-        var input = new Input
-        {
-            Reference = "me",
-            QueryParameters = "fields=id,name",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Facebook.Get(input, new Options { ThrowErrorOnFailure = true }, default);
-        Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(objectId));
-    }
-
-    [Test]
-    public void TestGetOtherWithDuplicateParameters()
-    {
-        var input = new Input
-        {
-            Reference = "me",
-            QueryParameters = "fields=id&fields=name",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Facebook.Get(input, new Options(), default);
-        Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Success);
-        Assert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
     [Test]
@@ -139,7 +87,22 @@ public class UnitTests
             ApiVersion = "18.0",
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, new Options(), default));
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Post(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public void TestThrowDataEmptyError()
+    {
+        var input = new Input
+        {
+            Reference = "me",
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Data = string.Empty,
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Post(input, new Options(), default));
         Assert.IsNotNull(ret);
     }
 
@@ -148,6 +111,25 @@ public class UnitTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
+            RequestUri = new Uri(url),
+        };
+        if (!string.IsNullOrEmpty(token))
+        {
+            request.Headers.Add("Authorization", "Bearer " + token);
+        }
+
+        var responseMessage = Client.Send(request, CancellationToken.None);
+        responseMessage.EnsureSuccessStatusCode();
+        var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
+
+        return JObject.Parse(responseString);
+    }
+
+    private static async Task<JObject> DeleteAsync(string url, string token)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Delete,
             RequestUri = new Uri(url),
         };
         if (!string.IsNullOrEmpty(token))

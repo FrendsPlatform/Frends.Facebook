@@ -1,6 +1,4 @@
-﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Threading;
@@ -16,13 +14,13 @@ public static class Facebook
 {
     /// <summary>
     /// This is task for reading data from Facebook API.
-    /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
+    /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Post).
     /// </summary>
     /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Get([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
+    public static async Task<Result> Post([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(input.AccessToken))
         {
@@ -35,6 +33,10 @@ public static class Facebook
         else if (string.IsNullOrEmpty(input.Reference))
         {
             throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
+        }
+        else if (string.IsNullOrEmpty(input.Data))
+        {
+            throw new ArgumentNullException(nameof(input.Data) + " cannot be empty.");
         }
 
         try
