@@ -68,13 +68,13 @@ public class UnitTests
             Data = "{ \"message\": \"This is a test.\" }",
         };
 
-        var ret = Facebook.Post(input, new Options(), default);
+        var ret = await Facebook.Post(input, new Options(), default);
         Assert.IsNotNull(ret);
-        Console.WriteLine(ret.Result.Message);
+        Console.WriteLine(ret.Message);
 
-        //Assert.IsTrue(ret.Result.Success);
         // Test user has no permissions for this
-        Assert.IsFalse(ret.Result.Success);
+        // Assert.IsTrue(ret.Result.Success);
+        Assert.IsFalse(ret.Success);
     }
 
     [Test]
