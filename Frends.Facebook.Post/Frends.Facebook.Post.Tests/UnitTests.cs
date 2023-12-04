@@ -85,6 +85,7 @@ public class UnitTests
             Reference = "me",
             AccessToken = string.Empty,
             ApiVersion = "18.0",
+            Data = "{ \"message\": \"This is a test.\" }",
         };
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Post(input, new Options(), default));
@@ -106,30 +107,61 @@ public class UnitTests
         Assert.IsNotNull(ret);
     }
 
+    [Test]
+    public void TestThrowApiVersionEmptyError()
+    {
+        var input = new Input
+        {
+            Reference = "me",
+            AccessToken = token,
+            ApiVersion = string.Empty,
+            Data = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Post(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public void TestThrowReferenceEmptyError()
+    {
+        var input = new Input
+        {
+            Reference = string.Empty,
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Data = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Post(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public void TestThrowErrorOnFailureError()
+    {
+        var input = new Input
+        {
+            Reference = objectId + "/feed",
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Data = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var option = new Options
+        {
+            ThrowErrorOnFailure = true,
+        };
+
+        var ret = Assert.ThrowsAsync<Exception>(() => Facebook.Post(input, option, default));
+        Assert.IsNotNull(ret);
+    }
+
     private static async Task<JObject> GetAsync(string url, string token)
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri(url),
-        };
-        if (!string.IsNullOrEmpty(token))
-        {
-            request.Headers.Add("Authorization", "Bearer " + token);
-        }
-
-        var responseMessage = Client.Send(request, CancellationToken.None);
-        responseMessage.EnsureSuccessStatusCode();
-        var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
-
-        return JObject.Parse(responseString);
-    }
-
-    private static async Task<JObject> DeleteAsync(string url, string token)
-    {
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Delete,
             RequestUri = new Uri(url),
         };
         if (!string.IsNullOrEmpty(token))
