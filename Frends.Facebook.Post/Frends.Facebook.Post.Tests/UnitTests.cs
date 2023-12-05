@@ -15,34 +15,11 @@ public class UnitTests
     private readonly string token = Environment.GetEnvironmentVariable("Facebook_token");
 
     private string objectId;
-    /*private readonly string _clientId = "clientId";
-    private readonly string _clientSecret = "clientSecret";
-    privare readonly string _facebookId = "facebookId";*/
 
     // Todo: Create Page Access Token
     [SetUp]
     public async Task SetUp()
     {
-        // Fetch token
-        /*try
-        {
-
-            var appTokenUrl = @"https://graph.facebook.com/v18.0/oauth/access_token?" +
-                "client_id=" + _clientId +
-                "&client_secret=" + _clientSecret +
-                "&grant_type=client_credentials";
-            var appToken = await GetAsync(appTokenUrl);
-
-            var pageAccessUrl = @"https://graph.facebook.com/" + _facebookId +
-                "/accounts?access_token=" + (string)appToken["access_token"];
-            var pageToken = await GetAsync(pageAccessUrl);
-
-            _token = (string)pageToken["data"][0]["access_token"].ToString();
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e);
-        }*/
 
         // Fetch App Id
         try
