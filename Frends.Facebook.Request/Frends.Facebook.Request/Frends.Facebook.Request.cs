@@ -7,15 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Frends.Facebook.Request.Definitions;
 using Frends.HTTP.Request.Definitions;
-using Frends.HTTP.Request;
 using System.Runtime.Caching;
 using System.Linq;
-using System.Net;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
-using System.Net.Http.Headers;
 using System.Text;
+using System.Net.Http.Headers;
 
 namespace Frends.Facebook.Request;
 
@@ -24,19 +21,6 @@ namespace Frends.Facebook.Request;
 /// </summary>
 public static class Facebook
 {
-    internal static IHttpClientFactory ClientFactory = new HttpClientFactory();
-    internal static readonly ObjectCache ClientCache = MemoryCache.Default;
-    private static readonly CacheItemPolicy _cachePolicy = new CacheItemPolicy() { SlidingExpiration = TimeSpan.FromHours(1) };
-
-    internal static void ClearClientCache()
-    {
-        var cacheKeys = ClientCache.Select(kvp => kvp.Key).ToList();
-        foreach (var cacheKey in cacheKeys)
-        {
-            ClientCache.Remove(cacheKey);
-        }
-    }
-
     /// <summary>
     /// This is task for reading data from Facebook API.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Get).
@@ -60,28 +44,31 @@ public static class Facebook
             throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
         }
 
-        var httpClient = GetHttpClientForOptions(options);
-        var headers = GetHeaderDictionary(input.Headers, input);
+        var headers = GetHeaderDictionary(input);
 
         using var content = GetContent(input, headers);
+        var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
         using var responseMessage = await GetHttpRequestResponseAsync(
-                httpClient,
+                new HttpClient(),
                 input.Method.ToString(),
-                input.Url,
+                url,
                 content,
                 headers,
                 options,
                 cancellationToken)
             .ConfigureAwait(false);
 
-        dynamic response;
+        var hbody = string.Empty;
 
-        var hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
+#if NET471
+        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
+#elif NET6_0_OR_GREATER
+        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
+#endif
         var hstatusCode = (int)responseMessage.StatusCode;
         var hheaders = GetResponseHeaderDictionary(responseMessage.Headers, responseMessage.Content?.Headers);
-        response = new Result(hbody, hheaders, hstatusCode);
 
-        return response;
+        return new Result(true, hbody);
     }
     /*
         try
@@ -152,34 +139,6 @@ public static class Facebook
             : new StringContent(input.Message ?? "");
     }
 
-    private static HttpClient GetHttpClientForOptions(Options options)
-    {
-    var cacheKey = GetHttpClientCacheKey(options);
-
-    if (ClientCache.Get(cacheKey) is HttpClient httpClient)
-    {
-        return httpClient;
-    }
-
-    httpClient = ClientFactory.CreateClient(options);
-    httpClient.SetDefaultRequestHeadersBasedOnOptions(options);
-
-    ClientCache.Add(cacheKey, httpClient, _cachePolicy);
-
-    return httpClient;
-    }
-
-    [ExcludeFromCodeCoverage]
-    private static string GetHttpClientCacheKey(Options options)
-    {
-    // Includes everything except for options.Token, which is used on request level, not http client level
-    return $"{options.Authentication}:{options.Username}:{options.Password}:{options.ClientCertificateSource}"
-            + $":{options.ClientCertificateFilePath}:{options.ClientCertificateInBase64}:{options.ClientCertificateKeyPhrase}"
-            + $":{options.CertificateThumbprint}:{options.LoadEntireChainForCertificate}:{options.ConnectionTimeoutSeconds}"
-            + $":{options.FollowRedirects}:{options.AllowInvalidCertificate}:{options.AllowInvalidResponseContentTypeCharSet}"
-            + $":{options.ThrowExceptionOnErrorResponse}:{options.AutomaticCookieHandling}";
-    }
-
     private static async Task<HttpResponseMessage> GetHttpRequestResponseAsync(
         HttpClient httpClient, string method, string url,
         HttpContent content, IDictionary<string, string> headers,
@@ -188,7 +147,7 @@ public static class Facebook
         cancellationToken.ThrowIfCancellationRequested();
 
         // Only POST, PUT, PATCH and DELETE can have content, otherwise the HttpClient will fail
-        var isContentAllowed = Enum.TryParse(method, ignoreCase: true, result: out SendMethod _);
+        var isContentAllowed = Enum.TryParse(method, ignoreCase: true, result: out SendMethods _);
 
         using (var request = new HttpRequestMessage(new HttpMethod(method), new Uri(url))
         {
@@ -228,13 +187,6 @@ public static class Facebook
 
                 // Cancellation is from inside of the request, mostly likely a timeout
                 throw new Exception("HttpRequest was canceled, most likely due to a timeout.", canceledException);
-            }
-
-
-            // this check is probably not needed anymore as the new HttpClient does not fail on invalid charsets
-            if (options.AllowInvalidResponseContentTypeCharSet && response.Content.Headers?.ContentType != null)
-            {
-                response.Content.Headers.ContentType.CharSet = null;
             }
 
             return response;
