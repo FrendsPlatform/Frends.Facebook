@@ -16,7 +16,7 @@ public static class Facebook
     /// This is task for reading data from Facebook API.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends.Facebook.Post).
     /// </summary>
-    /// <param name="input">Set reference type, parameters and token.</param>
+    /// <param name="input">Set reference type, parameters, data message and token.</param>
     /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
@@ -39,6 +39,8 @@ public static class Facebook
             throw new ArgumentNullException(nameof(input.Data) + " cannot be empty.");
         }
 
+        //using HttpClient client = new HttpClient();
+
         try
         {
             var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
@@ -60,16 +62,13 @@ public static class Facebook
             responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
 #endif
 
+            //client.Dispose();
             return new Result(true, responseString);
         }
         catch (Exception ex)
         {
-            if (options.ThrowErrorOnFailure)
-            {
-                throw new Exception(ex.Message, ex.InnerException);
-            }
-
-            return new Result(false, ex.Message);
+            //client.Dispose();
+            return options.ThrowErrorOnFailure ? throw new Exception(ex.Message, ex.InnerException) : new Result(false, ex.Message);
         }
     }
 }

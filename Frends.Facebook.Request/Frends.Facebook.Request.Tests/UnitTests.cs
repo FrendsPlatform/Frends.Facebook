@@ -1,6 +1,6 @@
-namespace Frends.Facebook.Get.Tests;
+namespace Frends.Facebook.Request.Tests;
 
-using Frends.Facebook.Get.Definitions;
+using Frends.Facebook.Request.Definitions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;

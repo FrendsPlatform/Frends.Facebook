@@ -1,4 +1,4 @@
-﻿namespace Frends.Facebook.Get.Definitions;
+﻿namespace Frends.Facebook.Request.Definitions;
 
 /// <summary>
 /// Result class usually contains properties of the return object.
