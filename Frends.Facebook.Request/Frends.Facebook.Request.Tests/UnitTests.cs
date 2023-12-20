@@ -62,13 +62,14 @@ public class UnitTests
     {
         var input = new Input
         {
+            Method = Methods.GET,
             QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
             Reference = "insights",
             AccessToken = token,
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, new Options(), default);
+        var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
 
         // Assert.IsTrue(ret.Result.Success);
@@ -81,13 +82,14 @@ public class UnitTests
     {
         var input = new Input
         {
+            Method = Methods.GET,
             Reference = "ads_archive",
             QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
             AccessToken = token,
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, new Options(), default);
+        var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
 
         // Assert.IsTrue(ret.Result.Success);
@@ -100,13 +102,14 @@ public class UnitTests
     {
         var input = new Input
         {
+            Method = Methods.GET,
             Reference = "me",
             QueryParameters = "fields=id,name",
             AccessToken = token,
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, new Options { ThrowErrorOnFailure = true }, default);
+        var ret = Facebook.Request(input, new Options { ThrowErrorOnFailure = true }, default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(objectId));
@@ -117,13 +120,14 @@ public class UnitTests
     {
         var input = new Input
         {
+            Method = Methods.GET,
             Reference = "me",
             QueryParameters = "fields=id&fields=name",
             AccessToken = token,
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Get(input, new Options(), default);
+        var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
         Assert.IsTrue(ret.Result.Success);
         Assert.IsTrue(ret.Result.Message.Contains(objectId));
@@ -134,12 +138,80 @@ public class UnitTests
     {
         var input = new Input
         {
+            Method = Methods.GET,
             Reference = "me",
             AccessToken = string.Empty,
             ApiVersion = "18.0",
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Get(input, new Options(), default));
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public async Task TestPostToPageAsync()
+    {
+        var input = new Input
+        {
+            Method = Methods.GET,
+            Reference = objectId + "/feed",
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Message = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var ret = await Facebook.Request(input, new Options(), default);
+        Assert.IsNotNull(ret);
+        Console.WriteLine(ret.Message);
+
+        Assert.IsTrue(ret.Success);
+    }
+
+    [Test]
+    public void TestThrowMessageEmptyError()
+    {
+        var input = new Input
+        {
+            Method = Methods.POST,
+            Reference = "me",
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Message = string.Empty,
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public void TestThrowApiVersionEmptyError()
+    {
+        var input = new Input
+        {
+            Method = Methods.POST,
+            Reference = "me",
+            AccessToken = token,
+            ApiVersion = string.Empty,
+            Message = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
+        Assert.IsNotNull(ret);
+    }
+
+    [Test]
+    public void TestThrowReferenceEmptyError()
+    {
+        var input = new Input
+        {
+            Method = Methods.POST,
+            Reference = string.Empty,
+            AccessToken = token,
+            ApiVersion = "18.0",
+            Message = "{ \"message\": \"This is a test.\" }",
+        };
+
+        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
         Assert.IsNotNull(ret);
     }
 

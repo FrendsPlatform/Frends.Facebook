@@ -1,18 +1,17 @@
 ﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
 
-using System;
-using System.ComponentModel;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using Frends.Facebook.Request.Definitions;
 using Frends.HTTP.Request.Definitions;
-using System.Runtime.Caching;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Frends.Facebook.Request;
 
@@ -29,7 +28,7 @@ public static class Facebook
     /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
     /// <returns>Object { bool Success, dynamic Message }.</returns>
-    public static async Task<Result> Get([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
+    public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(input.AccessToken))
         {
@@ -42,6 +41,10 @@ public static class Facebook
         else if (string.IsNullOrEmpty(input.Reference))
         {
             throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
+        }
+        else if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
+        {
+            throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
         }
 
         var headers = GetHeaderDictionary(input);
@@ -61,49 +64,20 @@ public static class Facebook
         var hbody = string.Empty;
 
 #if NET471
-        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
+    hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
 #elif NET6_0_OR_GREATER
         hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
 #endif
         var hstatusCode = (int)responseMessage.StatusCode;
         var hheaders = GetResponseHeaderDictionary(responseMessage.Headers, responseMessage.Content?.Headers);
 
-        return new Result(true, hbody);
+        if (options.ThrowErrorOnFailure && hstatusCode != 200)
+        {
+            throw new Exception(hbody);
+        }
+
+        return hstatusCode == 200 ? new Result(true, hbody) : new Result(false, hbody);
     }
-    /*
-        try
-        {
-            var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
-
-            var request = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(url),
-            };
-            request.Headers.Add("Authorization", "Bearer " + input.AccessToken);
-
-            using HttpClient client = new HttpClient();
-            var responseMessage = await client.SendAsync(request, cancellationToken);
-            responseMessage.EnsureSuccessStatusCode();
-            var responseString = string.Empty;
-#if NET471
-            responseString = await responseMessage.Content.ReadAsStringAsync();
-#elif NET6_0_OR_GREATER
-            responseString = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
-#endif
-
-            return new Result(true, responseString);
-        }
-        catch (Exception ex)
-        {
-            if (options.ThrowErrorOnFailure)
-            {
-                throw new Exception(ex.Message, ex.InnerException);
-            }
-
-            return new Result(false, ex.Message);
-        }
-    }*/
 
     // Combine response- and responsecontent header to one dictionary
     private static Dictionary<string, string> GetResponseHeaderDictionary(HttpResponseHeaders responseMessageHeaders, HttpContentHeaders contentHeaders)
@@ -181,7 +155,7 @@ public static class Facebook
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    // Cancellation is from outside -> Just throw 
+                    // Cancellation is from outside -> Just throw
                     throw;
                 }
 
