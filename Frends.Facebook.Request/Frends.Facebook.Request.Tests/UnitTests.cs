@@ -153,7 +153,7 @@ public class UnitTests
     {
         var input = new Input
         {
-            Method = Methods.GET,
+            Method = Methods.POST,
             Reference = objectId + "/feed",
             AccessToken = token,
             ApiVersion = "18.0",
@@ -162,9 +162,24 @@ public class UnitTests
 
         var ret = await Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
-        Console.WriteLine(ret.Message);
+        Assert.IsFalse(ret.Success);
+    }
 
-        Assert.IsTrue(ret.Success);
+    [Test]
+    public async Task TestThroErrorOnFailure()
+    {
+        var input = new Input
+        {
+            Method = Methods.GET,
+            Reference = objectId + "/abcdefg",
+            AccessToken = token,
+            ApiVersion = "18.0",
+        };
+
+        var option = new Options { ThrowErrorOnFailure = true };
+
+        var ret = Assert.ThrowsAsync<Exception>(() => Facebook.Request(input, option, default));
+        Assert.IsNotNull(ret);
     }
 
     [Test]

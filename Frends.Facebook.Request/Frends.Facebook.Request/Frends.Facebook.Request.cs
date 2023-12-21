@@ -69,7 +69,6 @@ public static class Facebook
         hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
 #endif
         var hstatusCode = (int)responseMessage.StatusCode;
-        var hheaders = GetResponseHeaderDictionary(responseMessage.Headers, responseMessage.Content?.Headers);
 
         if (options.ThrowErrorOnFailure && hstatusCode != 200)
         {
@@ -77,15 +76,6 @@ public static class Facebook
         }
 
         return hstatusCode == 200 ? new Result(true, hbody) : new Result(false, hbody);
-    }
-
-    // Combine response- and responsecontent header to one dictionary
-    private static Dictionary<string, string> GetResponseHeaderDictionary(HttpResponseHeaders responseMessageHeaders, HttpContentHeaders contentHeaders)
-    {
-        var responseHeaders = responseMessageHeaders.ToDictionary(h => h.Key, h => string.Join(";", h.Value));
-        var allHeaders = contentHeaders?.ToDictionary(h => h.Key, h => string.Join(";", h.Value)) ?? new Dictionary<string, string>();
-        responseHeaders.ToList().ForEach(x => allHeaders[x.Key] = x.Value);
-        return allHeaders;
     }
 
     private static IDictionary<string, string> GetHeaderDictionary(Input inputs)
