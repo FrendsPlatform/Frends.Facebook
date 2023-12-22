@@ -30,21 +30,13 @@ public static class Facebook
     public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(input.AccessToken))
-        {
             throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
-        }
         else if (string.IsNullOrEmpty(input.ApiVersion))
-        {
             throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
-        }
         else if (string.IsNullOrEmpty(input.Reference))
-        {
             throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
-        }
         else if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
-        {
             throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
-        }
 
         var headers = GetHeaderDictionary(input);
 
@@ -70,9 +62,7 @@ public static class Facebook
         var hstatusCode = (int)responseMessage.StatusCode;
 
         if (options.ThrowErrorOnFailure && hstatusCode != 200)
-        {
             throw new Exception(hbody);
-        }
 
         return hstatusCode == 200 ? new Result(true, hbody) : new Result(false, hbody);
     }
@@ -93,9 +83,7 @@ public static class Facebook
         var contentTypeIsSetAndValid = false;
         MediaTypeWithQualityHeaderValue validContentType = null;
         if (headers.TryGetValue("content-type", out string contentTypeValue))
-        {
             contentTypeIsSetAndValid = MediaTypeWithQualityHeaderValue.TryParse(contentTypeValue, out validContentType);
-        }
 
         return contentTypeIsSetAndValid
             ? new StringContent(input.Message ?? string.Empty, Encoding.GetEncoding(validContentType.CharSet ?? Encoding.UTF8.WebName))
