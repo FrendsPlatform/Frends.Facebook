@@ -56,6 +56,8 @@ public static class Facebook
 
 #if NET471
         hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
+        content.Dispose();
+        responseMessage.Dispose();
 #elif NET6_0_OR_GREATER
         hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
 #endif
