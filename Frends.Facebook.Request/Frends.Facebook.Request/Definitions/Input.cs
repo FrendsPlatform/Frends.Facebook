@@ -11,7 +11,7 @@ public class Input
     /// <summary>
     /// Gets or sets the HTTP Method to be used with the request.
     /// </summary>
-    /// <example>GET</example>
+    /// <example>Methods.GET</example>
     [DefaultValue(Methods.GET)]
     public Methods Method { get; set; }
 
