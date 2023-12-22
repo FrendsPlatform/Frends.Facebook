@@ -1,4 +1,4 @@
-﻿namespace Frends.Facebook.Get.Definitions;
+﻿namespace Frends.Facebook.Request.Definitions;
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +8,20 @@ using System.ComponentModel.DataAnnotations;
 /// </summary>
 public class Input
 {
+    /// <summary>
+    /// Gets or sets the HTTP Method to be used with the request.
+    /// </summary>
+    /// <example>Methods.GET</example>
+    [DefaultValue(Methods.GET)]
+    public Methods Method { get; set; }
+
+    /// <summary>
+    /// Gets or sets the message text to be sent with the request.
+    /// </summary>
+    /// <example>{ "Body": "Message" }</example>
+    [UIHint(nameof(Method), "", Methods.POST, Methods.DELETE, Methods.PATCH, Methods.PUT)]
+    public string Message { get; set; }
+
     /// <summary>
     /// Gets or sets object id or reference. All reference types can be found from: https://developers.facebook.com/docs/graph-api/reference.
     /// </summary>

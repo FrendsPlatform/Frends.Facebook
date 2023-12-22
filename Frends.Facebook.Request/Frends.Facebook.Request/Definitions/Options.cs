@@ -1,4 +1,4 @@
-﻿namespace Frends.Facebook.Get.Definitions;
+﻿namespace Frends.Facebook.Request.Definitions;
 
 using System.ComponentModel;
 
