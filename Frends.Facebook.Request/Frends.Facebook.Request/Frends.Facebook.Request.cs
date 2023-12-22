@@ -64,7 +64,7 @@ public static class Facebook
         if (options.ThrowErrorOnFailure && hstatusCode != 200)
             throw new Exception(hbody);
 
-        return hstatusCode == 200 ? new Result(true, hbody) : new Result(false, hbody);
+        return new Result(hstatusCode, hbody);
     }
 
     private static IDictionary<string, string> GetHeaderDictionary(Input inputs)
