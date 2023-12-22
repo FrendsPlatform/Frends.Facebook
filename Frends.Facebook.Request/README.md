@@ -1,5 +1,5 @@
 # Frends.Facebook.Request
-The task gets data from Facebook API with given reference, parameters and token.
+The task makes HTTP reequest to Facebook API with given reference, parameters and token.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Build](https://github.com/FrendsPlatform/Frends.Facebook/actions/workflows/Request_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Facebook/actions)

@@ -11,7 +11,7 @@
 	  <PackageTags>Frends</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	  <Description>Task for requesting data from Facebook API.</Description>
+	  <Description>Task for making HTTP requests to Facebook API.</Description>
 	  <PackageProjectUrl>https://frends.com/</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/FrendsPlatform/Frends.Facebook/tree/main/Frends.Facebook.Request</RepositoryUrl>
   </PropertyGroup>
