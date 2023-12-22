@@ -1,4 +1,4 @@
-﻿namespace Frends.HTTP.Request.Definitions;
+﻿namespace Frends.Facebook.Request.Definitions;
 
 /// <summary>
 /// Request header.
@@ -6,13 +6,13 @@
 public class Header
 {
     /// <summary>
-    /// Name of header.
+    /// Gets or sets name of header.
     /// </summary>
     /// <example>Authorization</example>
     public string Name { get; set; }
 
     /// <summary>
-    /// Value of header.
+    /// Gets or sets value of header.
     /// </summary>
     /// <example>Bearer AccessToken123</example>
     public string Value { get; set; }

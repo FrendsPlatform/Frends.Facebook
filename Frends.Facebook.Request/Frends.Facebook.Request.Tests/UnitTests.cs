@@ -166,7 +166,7 @@ public class UnitTests
     }
 
     [Test]
-    public async Task TestThroErrorOnFailure()
+    public void TestThroErrorOnFailure()
     {
         var input = new Input
         {

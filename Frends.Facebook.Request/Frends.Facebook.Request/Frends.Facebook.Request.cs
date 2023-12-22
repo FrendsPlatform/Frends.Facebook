@@ -1,7 +1,5 @@
 ﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
 
-using Frends.Facebook.Request.Definitions;
-using Frends.HTTP.Request.Definitions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Frends.Facebook.Request.Definitions;
 
 namespace Frends.Facebook.Request;
 
@@ -64,7 +63,7 @@ public static class Facebook
         var hbody = string.Empty;
 
 #if NET471
-    hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
+        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
 #elif NET6_0_OR_GREATER
         hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
 #endif
@@ -84,13 +83,13 @@ public static class Facebook
         authHeader.Value = $"Bearer {inputs.AccessToken}";
         var headers = new[] { authHeader }.ToArray();
 
-        //Ignore case for headers and key comparison
+        // Ignore case for headers and key comparison
         return headers.ToDictionary(key => key.Name, value => value.Value, StringComparer.InvariantCultureIgnoreCase);
     }
 
     private static HttpContent GetContent(Input input, IDictionary<string, string> headers)
     {
-        //Check if Content-Type exists and is set and valid
+        // Check if Content-Type exists and is set and valid
         var contentTypeIsSetAndValid = false;
         MediaTypeWithQualityHeaderValue validContentType = null;
         if (headers.TryGetValue("content-type", out string contentTypeValue))
@@ -99,14 +98,18 @@ public static class Facebook
         }
 
         return contentTypeIsSetAndValid
-            ? new StringContent(input.Message ?? "", Encoding.GetEncoding(validContentType.CharSet ?? Encoding.UTF8.WebName))
-            : new StringContent(input.Message ?? "");
+            ? new StringContent(input.Message ?? string.Empty, Encoding.GetEncoding(validContentType.CharSet ?? Encoding.UTF8.WebName))
+            : new StringContent(input.Message ?? string.Empty);
     }
 
     private static async Task<HttpResponseMessage> GetHttpRequestResponseAsync(
-        HttpClient httpClient, string method, string url,
-        HttpContent content, IDictionary<string, string> headers,
-        Options options, CancellationToken cancellationToken)
+        HttpClient httpClient,
+        string method,
+        string url,
+        HttpContent content,
+        IDictionary<string, string> headers,
+        Options options,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -118,15 +121,14 @@ public static class Facebook
             Content = isContentAllowed ? content : null,
         })
         {
-
-            //Clear default headers
+            // Clear default headers
             content.Headers.Clear();
             foreach (var header in headers)
             {
                 var requestHeaderAddedSuccessfully = request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 if (!requestHeaderAddedSuccessfully && request.Content != null)
                 {
-                    //Could not add to request headers try to add to content headers
+                    // Could not add to request headers try to add to content headers
                     // this check is probably not needed anymore as the new HttpClient does not seem fail on malformed headers
                     var contentHeaderAddedSuccessfully = content.Headers.TryAddWithoutValidation(header.Key, header.Value);
                     if (!contentHeaderAddedSuccessfully)
