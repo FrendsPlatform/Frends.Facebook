@@ -72,9 +72,11 @@ public class UnitTests
         var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
 
-        // Assert.IsTrue(ret.Result.Statuscode == 200);
-        // Test user has no permissions for this
-        Assert.IsFalse(ret.Result.Statuscode == 200);
+        /* Test user has no permissions for this and request currently returns an error code.
+         * Once permissions are added, assert should be replaced with:
+         * Assert.AreEqual(ret.Result.Statuscode, 200);
+         */
+        Assert.AreNotEqual(ret.Result.Statuscode, 200);
     }
 
     [Test]
@@ -92,9 +94,11 @@ public class UnitTests
         var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
 
-        // Assert.IsTrue(ret.Result.Success);
-        // Test user has no permissions for this
-        Assert.IsFalse(ret.Result.Statuscode == 200);
+        /* Test user has no permissions for this and request currently returns an error code.
+         * Once permissions are added, assert should be replaced with:
+         * Assert.AreEqual(ret.Result.Statuscode, 200);
+         */
+        Assert.AreNotEqual(ret.Result.Statuscode, 200);
     }
 
     [Test]
@@ -111,7 +115,7 @@ public class UnitTests
 
         var ret = Facebook.Request(input, new Options { ThrowErrorOnFailure = true }, default);
         Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Statuscode == 200);
+        Assert.AreEqual(ret.Result.Statuscode, 200);
         Assert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
@@ -129,7 +133,7 @@ public class UnitTests
 
         var ret = Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
-        Assert.IsTrue(ret.Result.Statuscode == 200);
+        Assert.AreEqual(ret.Result.Statuscode, 200);
         Assert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
@@ -162,7 +166,7 @@ public class UnitTests
 
         var ret = await Facebook.Request(input, new Options(), default);
         Assert.IsNotNull(ret);
-        Assert.IsFalse(ret.Statuscode == 200);
+        Assert.AreNotEqual(ret.Statuscode, 200);
     }
 
     [Test]
