@@ -235,7 +235,7 @@ public class UnitTests
 
     private static async Task<JObject> GetAsync(string url, string token)
     {
-        var request = new HttpRequestMessage
+        using var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
             RequestUri = new Uri(url),
@@ -245,10 +245,19 @@ public class UnitTests
             request.Headers.Add("Authorization", "Bearer " + token);
         }
 
-        var responseMessage = Client.Send(request, CancellationToken.None);
-        responseMessage.EnsureSuccessStatusCode();
-        var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
-        request.Dispose();
+        string responseString = null;
+
+        try
+        {
+            var responseMessage = Client.Send(request, CancellationToken.None);
+            responseMessage.EnsureSuccessStatusCode();
+            responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
+            request.Dispose();
+        }
+        catch (Exception)
+        {
+            request.Dispose();
+        }
 
         return JObject.Parse(responseString);
     }
