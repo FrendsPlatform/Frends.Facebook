@@ -89,8 +89,19 @@ public static class Facebook
         if (headers.TryGetValue("content-type", out string contentTypeValue))
             contentTypeIsSetAndValid = MediaTypeWithQualityHeaderValue.TryParse(contentTypeValue, out validContentType);
 
+        Encoding encoding = null;
+
+        try
+        {
+            encoding = Encoding.GetEncoding(validContentType.CharSet);
+        }
+        catch (NullReferenceException)
+        {
+            encoding = Encoding.GetEncoding(Encoding.UTF8.WebName);
+        }
+
         return contentTypeIsSetAndValid
-            ? new StringContent(input.Message ?? string.Empty, Encoding.GetEncoding(validContentType.CharSet ?? Encoding.UTF8.WebName))
+            ? new StringContent(input.Message ?? string.Empty, encoding)
             : new StringContent(input.Message ?? string.Empty);
     }
 
