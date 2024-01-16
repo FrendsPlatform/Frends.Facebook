@@ -57,6 +57,12 @@ public class UnitTests
         }
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        Client.Dispose();
+    }
+
     [Test]
     public void TestGetInsights()
     {
