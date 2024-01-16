@@ -48,7 +48,6 @@ public static class Facebook
                 url,
                 content,
                 headers,
-                options,
                 cancellationToken)
             .ConfigureAwait(false);
 
@@ -71,8 +70,11 @@ public static class Facebook
 
     private static IDictionary<string, string> GetHeaderDictionary(Input inputs)
     {
-        var authHeader = new Header { Name = "Authorization" };
-        authHeader.Value = $"Bearer {inputs.AccessToken}";
+        var authHeader = new Header
+        {
+            Name = "Authorization",
+            Value = $"Bearer {inputs.AccessToken}",
+        };
         var headers = new[] { authHeader }.ToArray();
 
         // Ignore case for headers and key comparison
@@ -98,7 +100,6 @@ public static class Facebook
         string url,
         HttpContent content,
         IDictionary<string, string> headers,
-        Options options,
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -144,6 +145,8 @@ public static class Facebook
                 // Cancellation is from inside of the request, mostly likely a timeout
                 throw new Exception("HttpRequest was canceled, most likely due to a timeout.", canceledException);
             }
+
+            request.Dispose();
 
             return response;
         }
