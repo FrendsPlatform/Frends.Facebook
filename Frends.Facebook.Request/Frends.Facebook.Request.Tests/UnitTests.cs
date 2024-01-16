@@ -45,19 +45,12 @@ public class UnitTests
         }*/
 
         // Fetch App Id
-        try
-        {
-            var appUrl = @"https://graph.facebook.com/v18.0/me";
-            var result = await GetAsync(appUrl, token);
-            objectId = (string)result["id"];
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        var appUrl = @"https://graph.facebook.com/v18.0/me";
+        var result = await GetAsync(appUrl, token);
+        objectId = (string)result["id"];
     }
 
-    [TearDown]
+    [OneTimeTearDown]
     public void TearDown()
     {
         Client.Dispose();
@@ -255,6 +248,7 @@ public class UnitTests
         var responseMessage = Client.Send(request, CancellationToken.None);
         responseMessage.EnsureSuccessStatusCode();
         var responseString = await responseMessage.Content.ReadAsStringAsync(CancellationToken.None);
+        request.Dispose();
 
         return JObject.Parse(responseString);
     }
