@@ -147,6 +147,7 @@ public static class Facebook
             }
 
             request.Dispose();
+            httpClient.Dispose();
 
             return response;
         }
