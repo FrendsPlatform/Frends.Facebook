@@ -91,11 +91,11 @@ public static class Facebook
 
         Encoding encoding = null;
 
-        try
+        if(validContentType.CharSet != null)
         {
             encoding = Encoding.GetEncoding(validContentType.CharSet);
         }
-        catch (NullReferenceException)
+        else
         {
             encoding = Encoding.GetEncoding(Encoding.UTF8.WebName);
         }
