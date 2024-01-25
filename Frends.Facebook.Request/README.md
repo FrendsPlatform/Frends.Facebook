@@ -1,9 +1,9 @@
-# Frends.Facebook.Get
-The task gets data from Facebook API with given reference, parameters and token.
+# Frends.Facebook.Request
+The task makes HTTP reequest to Facebook API with given reference, parameters and token.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Build](https://github.com/FrendsPlatform/Frends.Facebook/actions/workflows/Get_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Facebook/actions)
-![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.Facebook/Frends.Facebook.Get|main)
+[![Build](https://github.com/FrendsPlatform/Frends.Facebook/actions/workflows/Request_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Facebook/actions)
+![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.Facebook/Frends.Facebook.Request|main)
 
 ## Installing
 
