@@ -3,6 +3,7 @@ namespace Frends.Facebook.Request.Tests;
 using Frends.Facebook.Request.Definitions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Net.Http;
 using System.Threading;
@@ -44,13 +45,13 @@ public class UnitTests
         };
 
         var ret = Facebook.Request(input, new Options(), default);
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
 
         /* Test user has no permissions for this and request currently returns an error code.
          * Once permissions are added, assert should be replaced with:
          * Assert.AreEqual(ret.Result.Statuscode, 200);
          */
-        Assert.AreNotEqual(ret.Result.Statuscode, 200);
+        ClassicAssert.AreNotEqual(ret.Result.Statuscode, 200);
     }
 
     [Test]
@@ -66,13 +67,13 @@ public class UnitTests
         };
 
         var ret = Facebook.Request(input, new Options(), default);
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
 
         /* Test user has no permissions for this and request currently returns an error code.
          * Once permissions are added, assert should be replaced with:
          * Assert.AreEqual(ret.Result.Statuscode, 200);
          */
-        Assert.AreNotEqual(ret.Result.Statuscode, 200);
+        ClassicAssert.AreNotEqual(ret.Result.Statuscode, 200);
     }
 
     [Test]
@@ -88,9 +89,9 @@ public class UnitTests
         };
 
         var ret = Facebook.Request(input, new Options { ThrowErrorOnFailure = true }, default);
-        Assert.IsNotNull(ret);
-        Assert.AreEqual(ret.Result.Statuscode, 200);
-        Assert.IsTrue(ret.Result.Message.Contains(objectId));
+        ClassicAssert.IsNotNull(ret);
+        ClassicAssert.AreEqual(ret.Result.Statuscode, 200);
+        ClassicAssert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
     [Test]
@@ -106,9 +107,9 @@ public class UnitTests
         };
 
         var ret = Facebook.Request(input, new Options(), default);
-        Assert.IsNotNull(ret);
-        Assert.AreEqual(ret.Result.Statuscode, 200);
-        Assert.IsTrue(ret.Result.Message.Contains(objectId));
+        ClassicAssert.IsNotNull(ret);
+        ClassicAssert.AreEqual(ret.Result.Statuscode, 200);
+        ClassicAssert.IsTrue(ret.Result.Message.Contains(objectId));
     }
 
     [Test]
@@ -123,7 +124,7 @@ public class UnitTests
         };
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
     }
 
     [Test]
@@ -139,8 +140,8 @@ public class UnitTests
         };
 
         var ret = await Facebook.Request(input, new Options(), default);
-        Assert.IsNotNull(ret);
-        Assert.AreNotEqual(ret.Statuscode, 200);
+        ClassicAssert.IsNotNull(ret);
+        ClassicAssert.AreNotEqual(ret.Statuscode, 200);
     }
 
     [Test]
@@ -157,7 +158,7 @@ public class UnitTests
         var option = new Options { ThrowErrorOnFailure = true };
 
         var ret = Assert.ThrowsAsync<Exception>(() => Facebook.Request(input, option, default));
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
     }
 
     [Test]
@@ -173,7 +174,7 @@ public class UnitTests
         };
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
     }
 
     [Test]
@@ -189,7 +190,7 @@ public class UnitTests
         };
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
     }
 
     [Test]
@@ -205,7 +206,7 @@ public class UnitTests
         };
 
         var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        Assert.IsNotNull(ret);
+        ClassicAssert.IsNotNull(ret);
     }
 
     private static async Task<JObject> GetAsync(string url, string token)
