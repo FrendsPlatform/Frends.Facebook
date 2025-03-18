@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8.0</TargetFrameworks>
+	  <TargetFrameworks>net6.0</TargetFrameworks>
 	  <LangVersion>Latest</LangVersion>
 	  <Version>1.0.1</Version>
 	  <Authors>Frends</Authors>
@@ -37,7 +37,7 @@
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	</PackageReference>
-    <PackageReference Include="System.Runtime.Caching" Version="9.0.2" />
+    <PackageReference Include="System.Runtime.Caching" Version="9.0.3" />
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net471'">
