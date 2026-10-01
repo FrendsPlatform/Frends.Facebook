@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.0] - 2026-10-01
+### Changed
+- Added success and error details to the result when a request fails.
+- Added an option to customize error messages returned or thrown by the Task.
+
 ## [1.1.0] - 2025-02-17
 ### Changed
 - Update package System.ComponentModel.Annotations from 4.7.0 to 5.0.0

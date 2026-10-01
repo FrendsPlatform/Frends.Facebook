@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Frends.Facebook.Request.Definitions;
+using Frends.Facebook.Request.Helpers;
 
 namespace Frends.Facebook.Request;
 
@@ -29,43 +30,57 @@ public static class Facebook
     /// <returns>Object { int StatusCode, dynamic Message }.</returns>
     public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(input.AccessToken))
-            throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
-        else if (string.IsNullOrEmpty(input.ApiVersion))
-            throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
-        else if (string.IsNullOrEmpty(input.Reference))
-            throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
-        else if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
-            throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
+        options ??= new Options();
 
-        var headers = GetHeaderDictionary(input);
+        try
+        {
+            ValidationHandler.Run(input, options);
 
-        using var content = GetContent(input, headers);
-        var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
-        using var responseMessage = await GetHttpRequestResponseAsync(
-                new HttpClient(),
-                input.Method.ToString(),
-                url,
-                content,
-                headers,
-                cancellationToken)
-            .ConfigureAwait(false);
+            if (string.IsNullOrEmpty(input.AccessToken))
+                throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
+            else if (string.IsNullOrEmpty(input.ApiVersion))
+                throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
+            else if (string.IsNullOrEmpty(input.Reference))
+                throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
+            else if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
+                throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
 
-        var hbody = string.Empty;
+            var headers = GetHeaderDictionary(input);
 
+            using var content = GetContent(input, headers);
+            var url = $@"https://graph.facebook.com/v{input.ApiVersion}/" + (!string.IsNullOrEmpty(input.QueryParameters) ? input.Reference + "?" + input.QueryParameters : input.Reference);
+            using var responseMessage = await GetHttpRequestResponseAsync(
+                    new HttpClient(),
+                    input.Method.ToString(),
+                    url,
+                    content,
+                    headers,
+                    cancellationToken)
+                .ConfigureAwait(false);
+
+            var hbody = string.Empty;
 #if NET471
-        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
-        content.Dispose();
-        responseMessage.Dispose();
+            hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
+            content.Dispose();
+            responseMessage.Dispose();
 #elif NET6_0_OR_GREATER
-        hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
+            hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
 #endif
-        var hstatusCode = (int)responseMessage.StatusCode;
+            var hstatusCode = (int)responseMessage.StatusCode;
 
-        if (options.ThrowErrorOnFailure && hstatusCode != 200)
-            throw new Exception(hbody);
+            if (hstatusCode != 200)
+            {
+                var exception = new Exception(hbody);
+                exception.Data["StatusCode"] = hstatusCode;
+                throw exception;
+            }
 
-        return new Result(hstatusCode, hbody);
+            return new Result(hstatusCode, hbody);
+        }
+        catch (Exception ex)
+        {
+            return ex.Handle(options);
+        }
     }
 
     private static IDictionary<string, string> GetHeaderDictionary(Input inputs)

@@ -10,20 +10,36 @@ public class Result
     /// </summary>
     /// <param name="statuscode">Indicates whether GET call was executed succesfully.</param>
     /// <param name="message">Returns the message from the interface.</param>
-    internal Result(int statuscode, object message)
+    /// <param name="success">Indicates whether the request completed successfully.</param>
+    /// <param name="error">Error details when the request fails.</param>
+    internal Result(int statuscode, object message, bool success = true, Error error = null)
     {
         this.Statuscode = statuscode;
         this.Message = message;
+        this.Success = success;
+        this.Error = error;
     }
 
     /// <summary>
-    /// Gets a value indicating whether GET call was executed successfully.
+    /// Gets a value indicating whether the request completed successfully.
     /// </summary>
-    /// <example>True.</example>
+    /// <example>true</example>
+    public bool Success { get; private set; }
+
+    /// <summary>
+    /// Gets error details. Null when the request succeeds.
+    /// </summary>
+    /// <example>null</example>
+    public Error Error { get; private set; }
+
+    /// <summary>
+    /// Gets the HTTP status code returned by the request.
+    /// </summary>
+    /// <example>200</example>
     public int Statuscode { get; private set; }
 
     /// <summary>
-    /// Gets message from the interface.
+    /// Gets the response message from Facebook.
     /// </summary>
     /// <example>{ "id": 123456789, "name": "UserName" }</example>
     public dynamic Message { get; private set; }
