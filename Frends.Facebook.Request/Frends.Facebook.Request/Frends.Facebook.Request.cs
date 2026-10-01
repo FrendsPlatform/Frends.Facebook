@@ -27,7 +27,7 @@ public static class Facebook
     /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
-    /// <returns>Object { int StatusCode, dynamic Message }.</returns>
+    /// <returns>Object containing the success state, error details, HTTP status code, and response message.</returns>
     public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         options ??= new Options();

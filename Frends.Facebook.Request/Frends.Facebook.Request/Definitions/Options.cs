@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 public class Options
 {
     /// <summary>
-    /// Gets or sets a value indicating whether error should throw an exception (true) or stop the Task and return result object containing Result.Success = false and Result.ErrorMessage = 'exception message' (false).
+    /// Gets or sets a value indicating whether error should throw an exception (true) or return a failed Result with an Error message (false).
     /// </summary>
     /// <example>true</example>
     [DefaultValue(true)]
