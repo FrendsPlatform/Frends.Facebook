@@ -1,10 +1,11 @@
 namespace Frends.Facebook.Request.Tests;
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Frends.Facebook.Request.Definitions;
 using NUnit.Framework;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading;
+using System.Threading.Tasks;
 
 [TestFixture]
 internal class ErrorHandlerTest
@@ -17,7 +18,7 @@ internal class ErrorHandlerTest
         var input = CreateInvalidInput();
         var options = new Options();
 
-        Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, options, CancellationToken.None));
+        Assert.ThrowsAsync<ValidationException>(() => Facebook.Request(input, options, CancellationToken.None));
     }
 
     [Test]
