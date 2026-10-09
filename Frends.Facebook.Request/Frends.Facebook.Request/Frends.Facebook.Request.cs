@@ -1,6 +1,4 @@
-﻿#pragma warning disable SA1200 //Using directives should be placed correctly.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,7 +25,7 @@ public static class Facebook
     /// <param name="input">Set reference type, parameters and token.</param>
     /// <param name="options">Optional parameters.</param>
     /// <param name="cancellationToken">Cancellation token given by Frends.</param>
-    /// <returns>Object containing the success state, error details, HTTP status code, and response message.</returns>
+    /// <returns> { bool Success, int StatusCode, dynamic Message, object Error { string Message, object AdditionalInfo } }</returns>
     public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
         options ??= new Options();
@@ -36,13 +34,7 @@ public static class Facebook
         {
             ValidationHandler.Run(input, options);
 
-            if (string.IsNullOrEmpty(input.AccessToken))
-                throw new ArgumentNullException(nameof(input.AccessToken) + " cannot be empty.");
-            else if (string.IsNullOrEmpty(input.ApiVersion))
-                throw new ArgumentNullException(nameof(input.ApiVersion) + " cannot be empty.");
-            else if (string.IsNullOrEmpty(input.Reference))
-                throw new ArgumentNullException(nameof(input.Reference) + " cannot be empty.");
-            else if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
+            if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
                 throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
 
             var headers = GetHeaderDictionary(input);

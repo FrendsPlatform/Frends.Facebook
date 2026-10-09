@@ -14,10 +14,10 @@ public class Result
     /// <param name="error">Error details when the request fails.</param>
     internal Result(int statuscode, object message, bool success = true, Error error = null)
     {
-        this.Statuscode = statuscode;
-        this.Message = message;
-        this.Success = success;
-        this.Error = error;
+        Success = success;
+        Statuscode = statuscode;
+        Message = message;
+        Error = error;
     }
 
     /// <summary>
