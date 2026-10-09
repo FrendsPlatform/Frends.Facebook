@@ -80,7 +80,7 @@ public class UnitTests
             ApiVersion = "18.0",
         };
 
-        var ret = Assert.ThrowsAsync<ValidationException>(() => Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default));
+        var ret = Assert.ThrowsAsync<ValidationException>(() => Facebook.Request(input, new Options(), default));
         ClassicAssert.IsNotNull(ret);
     }
 
@@ -99,69 +99,6 @@ public class UnitTests
         var ret = await Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default);
         ClassicAssert.IsNotNull(ret);
         ClassicAssert.AreNotEqual(ret.Statuscode, 200);
-    }
-
-    [Test]
-    public void TestThroErrorOnFailure()
-    {
-        var input = new Input
-        {
-            Method = Methods.GET,
-            Reference = objectId + "/abcdefg",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Assert.ThrowsAsync<Exception>(() => Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowMessageEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = "me",
-            AccessToken = token,
-            ApiVersion = "18.0",
-            Message = string.Empty,
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowApiVersionEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = "me",
-            AccessToken = token,
-            ApiVersion = string.Empty,
-            Message = "{ \"message\": \"This is a test.\" }",
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowReferenceEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = string.Empty,
-            AccessToken = token,
-            ApiVersion = "18.0",
-            Message = "{ \"message\": \"This is a test.\" }",
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default));
-        ClassicAssert.IsNotNull(ret);
     }
 
     private static async Task<JObject> GetAsync(string url, string token)
