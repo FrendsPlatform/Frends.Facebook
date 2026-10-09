@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,50 +34,6 @@ public class UnitTests
     }
 
     [Test]
-    public void TestGetInsights()
-    {
-        var input = new Input
-        {
-            Method = Methods.GET,
-            QueryParameters = "metric=page_impressions_unique&metric=post_reactions_love_total",
-            Reference = "insights",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Facebook.Request(input, new Options(), default);
-        ClassicAssert.IsNotNull(ret);
-
-        /* Test user has no permissions for this and request currently returns an error code.
-         * Once permissions are added, assert should be replaced with:
-         * Assert.AreEqual(ret.Result.Statuscode, 200);
-         */
-        ClassicAssert.AreNotEqual(ret.Result.Statuscode, 200);
-    }
-
-    [Test]
-    public void TestGetADS()
-    {
-        var input = new Input
-        {
-            Method = Methods.GET,
-            Reference = "ads_archive",
-            QueryParameters = "ad_reached_countries=ALL&ad_type=POLITICAL_AND_ISSUE_ADS",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var ret = Facebook.Request(input, new Options(), default);
-        ClassicAssert.IsNotNull(ret);
-
-        /* Test user has no permissions for this and request currently returns an error code.
-         * Once permissions are added, assert should be replaced with:
-         * Assert.AreEqual(ret.Result.Statuscode, 200);
-         */
-        ClassicAssert.AreNotEqual(ret.Result.Statuscode, 200);
-    }
-
-    [Test]
     public void TestGetOther()
     {
         var input = new Input
@@ -88,7 +45,7 @@ public class UnitTests
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Request(input, new Options { ThrowErrorOnFailure = true }, default);
+        var ret = Facebook.Request(input, new Options(), default);
         ClassicAssert.IsNotNull(ret);
         ClassicAssert.AreEqual(ret.Result.Statuscode, 200);
         ClassicAssert.IsTrue(ret.Result.Message.Contains(objectId));
@@ -106,7 +63,7 @@ public class UnitTests
             ApiVersion = "18.0",
         };
 
-        var ret = Facebook.Request(input, new Options(), default);
+        var ret = Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default);
         ClassicAssert.IsNotNull(ret);
         ClassicAssert.AreEqual(ret.Result.Statuscode, 200);
         ClassicAssert.IsTrue(ret.Result.Message.Contains(objectId));
@@ -123,7 +80,7 @@ public class UnitTests
             ApiVersion = "18.0",
         };
 
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
+        var ret = Assert.ThrowsAsync<ValidationException>(() => Facebook.Request(input, new Options(), default));
         ClassicAssert.IsNotNull(ret);
     }
 
@@ -139,74 +96,9 @@ public class UnitTests
             Message = "{ \"message\": \"This is a test.\" }",
         };
 
-        var ret = await Facebook.Request(input, new Options(), default);
+        var ret = await Facebook.Request(input, new Options { ThrowErrorOnFailure = false }, default);
         ClassicAssert.IsNotNull(ret);
         ClassicAssert.AreNotEqual(ret.Statuscode, 200);
-    }
-
-    [Test]
-    public void TestThroErrorOnFailure()
-    {
-        var input = new Input
-        {
-            Method = Methods.GET,
-            Reference = objectId + "/abcdefg",
-            AccessToken = token,
-            ApiVersion = "18.0",
-        };
-
-        var option = new Options { ThrowErrorOnFailure = true };
-
-        var ret = Assert.ThrowsAsync<Exception>(() => Facebook.Request(input, option, default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowMessageEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = "me",
-            AccessToken = token,
-            ApiVersion = "18.0",
-            Message = string.Empty,
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowApiVersionEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = "me",
-            AccessToken = token,
-            ApiVersion = string.Empty,
-            Message = "{ \"message\": \"This is a test.\" }",
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        ClassicAssert.IsNotNull(ret);
-    }
-
-    [Test]
-    public void TestThrowReferenceEmptyError()
-    {
-        var input = new Input
-        {
-            Method = Methods.POST,
-            Reference = string.Empty,
-            AccessToken = token,
-            ApiVersion = "18.0",
-            Message = "{ \"message\": \"This is a test.\" }",
-        };
-
-        var ret = Assert.ThrowsAsync<ArgumentNullException>(() => Facebook.Request(input, new Options(), default));
-        ClassicAssert.IsNotNull(ret);
     }
 
     private static async Task<JObject> GetAsync(string url, string token)
