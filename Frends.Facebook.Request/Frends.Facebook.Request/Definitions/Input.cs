@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Frends.Facebook.Request.Attributes;
 
 /// <summary>
 /// Input class usually contains parameters that are required.
@@ -20,6 +21,7 @@ public class Input
     /// </summary>
     /// <example>{ "Body": "Message" }</example>
     [UIHint(nameof(Method), "", Methods.POST, Methods.DELETE, Methods.PATCH, Methods.PUT)]
+    [RequiredIf(nameof(Method), Methods.POST, Methods.DELETE, Methods.PATCH, Methods.PUT)]
     public string Message { get; set; }
 
     /// <summary>
@@ -28,6 +30,7 @@ public class Input
     /// <example>123456789, 123456789/insights</example>
     [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("123456789")]
+    [Required]
     public string Reference { get; set; }
 
     /// <summary>
@@ -44,6 +47,7 @@ public class Input
     /// <example>18.0</example>
     [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("18.0")]
+    [Required]
     public string ApiVersion { get; set; }
 
     /// <summary>
@@ -53,5 +57,6 @@ public class Input
     [PasswordPropertyText]
     [DisplayFormat(DataFormatString = "Text")]
     [DefaultValue("BearerToken1234")]
+    [Required]
     public string AccessToken { get; set; }
 }
