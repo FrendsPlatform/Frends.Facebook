@@ -28,14 +28,9 @@ public static class Facebook
     /// <returns> { bool Success, int StatusCode, dynamic Message, object Error { string Message, object AdditionalInfo } }</returns>
     public static async Task<Result> Request([PropertyTab] Input input, [PropertyTab] Options options, CancellationToken cancellationToken)
     {
-        options ??= new Options();
-
         try
         {
             ValidationHandler.Run(input, options);
-
-            if (string.IsNullOrEmpty(input.Message) && Enum.GetNames(typeof(SendMethods)).Contains(input.Method.ToString()))
-                throw new ArgumentNullException(nameof(input.Message) + " cannot be empty.");
 
             var headers = GetHeaderDictionary(input);
 
@@ -51,13 +46,9 @@ public static class Facebook
                 .ConfigureAwait(false);
 
             var hbody = string.Empty;
-#if NET471
-            hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false) : null;
-            content.Dispose();
-            responseMessage.Dispose();
-#elif NET6_0_OR_GREATER
+
             hbody = responseMessage.Content != null ? await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false) : null;
-#endif
+
             var hstatusCode = (int)responseMessage.StatusCode;
 
             if (hstatusCode != 200)

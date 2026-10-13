@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Frends.Facebook.Request.Attributes;
 
 /// <summary>
 /// Input class usually contains parameters that are required.
@@ -20,6 +21,7 @@ public class Input
     /// </summary>
     /// <example>{ "Body": "Message" }</example>
     [UIHint(nameof(Method), "", Methods.POST, Methods.DELETE, Methods.PATCH, Methods.PUT)]
+    [RequiredIf(nameof(Method), Methods.POST, Methods.DELETE, Methods.PATCH, Methods.PUT)]
     public string Message { get; set; }
 
     /// <summary>
